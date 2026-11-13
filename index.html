@@ -1,0 +1,1836 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 대한민국 에듀롬 사용자 포럼 — 제대로, 안전하게 쓰는 에듀롬</title>
+
+<!-- 설정 ① 덱 동작 (README 「설정」 참고) -->
+<script>
+window.DECK = {
+  ratio:   '16:9',
+  paper:   false,
+  valign:  'top',
+  halign:  'left',
+  sectionLevel: 1,
+  slideLevel:   2,
+  figureNumber: false,
+  chapnav: true,
+  footer:  true,
+  timer:   130,    // 13:00 ~ 15:10
+  slideWarn: 120,
+  slideOver: 240,
+  skipBlur:     0,
+  skipBlurHold: 2500,
+  meta: {
+    title:   '2026 대한민국 에듀롬 사용자 포럼',
+    event:   'NNNetFraST 2026',
+    date:    '2026. 11. 12.',
+    speaker: '장민석 (msjang@kisti.re.kr)',
+  },
+};
+
+document.documentElement.className = [
+  DECK.paper ? 'paper' : '',
+  'v-' + DECK.valign,
+  'h-' + DECK.halign,
+  DECK.figureNumber ? 'fignum' : '',
+  DECK.chapnav ? '' : 'no-chapnav',
+  DECK.footer  ? '' : 'no-footer',
+].filter(Boolean).join(' ');
+</script>
+
+<!-- 검색 · 공유 메타
+     ⚠ 슬랙 · 카카오톡 · X · 링크드인의 OG 스크래퍼는 JS 를 실행하지 않습니다. 정적 HTML 로 적습니다.
+     ⚠ canonical 과 og:image 는 절대 URL 이어야 합니다. 주소가 바뀌면 여기 네 곳을 함께 고칩니다. -->
+<meta name="description" content="「CA 인증서 확인 안 함」 · TOFU 설정이 가짜 AP 에 취약한 이유, CA 인증서와 서버 인증서, RADIUS 전용 사설 CA 의 필요성, CA 인증서 고지 의무, 대한민국 eduroam 서비스 및 상표 고지, 다중캠퍼스 RADIUS 기록을 위한 RFC 5580 위치 속성, 국내 참여기관 서버 인증서 점검 · 사전 설문 결과. 2026 대한민국 에듀롬 사용자 포럼(NNNetFraST 2026) · 장민석(KISTI).">
+<meta name="author" content="장민석 (msjang@kisti.re.kr)">
+<meta name="keywords" content="eduroam, 에듀롬, KREONET, KISTI, RADIUS, 802.1X, EAP, 서버 인증서, 가짜 AP, RFC 5580, NNNetFraST 2026">
+<link rel="canonical" href="https://eduroam-kr.github.io/2026-user-forum-n3frast-slide/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NNNetFraST 2026">
+<meta property="og:title" content="2026 대한민국 에듀롬 사용자 포럼 — 제대로, 안전하게 쓰는 에듀롬">
+<meta property="og:description" content="「CA 인증서 확인 안 함」 · TOFU 설정이 가짜 AP 에 취약한 이유, CA 인증서와 서버 인증서, RADIUS 전용 사설 CA 의 필요성, CA 인증서 고지 의무, 대한민국 eduroam 서비스 및 상표 고지, 다중캠퍼스 RADIUS 기록을 위한 RFC 5580 위치 속성, 국내 참여기관 서버 인증서 점검 · 사전 설문 결과. 2026 대한민국 에듀롬 사용자 포럼(NNNetFraST 2026) · 장민석(KISTI).">
+<meta property="og:url" content="https://eduroam-kr.github.io/2026-user-forum-n3frast-slide/">
+<meta property="og:image" content="https://eduroam-kr.github.io/2026-user-forum-n3frast-slide/images/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="표지 — 2026 대한민국 에듀롬 사용자 포럼 · 제대로, 안전하게 쓰는 에듀롬">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="2026 대한민국 에듀롬 사용자 포럼 — 제대로, 안전하게 쓰는 에듀롬">
+<meta name="twitter:description" content="「CA 인증서 확인 안 함」 · TOFU 설정이 가짜 AP 에 취약한 이유, CA 인증서와 서버 인증서, RADIUS 전용 사설 CA 의 필요성, CA 인증서 고지 의무, 대한민국 eduroam 서비스 및 상표 고지, 다중캠퍼스 RADIUS 기록을 위한 RFC 5580 위치 속성, 국내 참여기관 서버 인증서 점검 · 사전 설문 결과. 2026 대한민국 에듀롬 사용자 포럼(NNNetFraST 2026) · 장민석(KISTI).">
+<meta name="twitter:image" content="https://eduroam-kr.github.io/2026-user-forum-n3frast-slide/images/og-image.png">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
+<link rel="stylesheet" href="deck.css">
+<link rel="stylesheet" href="themes/cobalt.css">
+<style>
+/* 설문 결과가 들어갈 자리 — 값을 채우면 {.ph} 를 지웁니다 */
+.reveal .ph { background:#fff3c4; color:#7a5a00; padding:0 .25em; border-radius:4px; font-weight:700; }
+.reveal .qr img { width:300px; max-height:none; border:0; }
+.reveal .big { font-size:1.6em; font-weight:800; line-height:1.2; }
+</style>
+</head>
+<body>
+<textarea id="deck">
+
+# 2026 대한민국 에듀롬 사용자 포럼 {.cover .center}
+
+### 제대로, 안전하게 쓰는 에듀롬
+
+::: {.muted}
+[NNNetFraST 2026](https://www.nnnetfrast.kr/2026) · 2026. 11. 12.(목) · 대구 인터불고 엑스코 호텔 B1F 크리스탈 볼룸  
+장민석 · [한국과학기술정보연구원(KISTI)](https://www.kisti.re.kr) [과학기술연구망센터(KREONET)](https://www.kreonet.net)
+:::
+
+
+## 이용 안내 / License {.center}
+
+::: {.card}
+::: {.card-body .dense1}
+- 이 발표자료는 **© 2026 장민석**, [**CC BY-NC-ND 4.0**](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko)
+- AI 도구에 넣어 요약 · 번역 · 질의응답에 활용해도 됨  
+  (결과물을 다시 배포할 때는 CC BY-NC-ND 4.0 조건을 따름)
+- 설문 · 점검 수치는 기관을 알아볼 수 없도록 집계한 통계이며,  
+  개별 기관을 특정하는 데 쓰지 않기를 바람
+- **제3자 자료**(기관 웹사이트 화면, 운영체제 설정 화면, 표준 · 제조사 문서, 공개 통계 등)는 **비평 · 인용 목적**으로 사용했으며 각 권리자에게 저작권이 있음
+- eduroam 로고와 eduroam® 은 GÉANT Association 의 등록상표,  
+  대한민국 eduroam 상표(제40-1190084호)에 관한 권리는 KISTI 가 보유
+:::
+:::
+
+
+## AI 활용 고지 {.center .fit}
+
+::: {.card}
+::: {.card-body .dense1}
+- 이 발표자료는 생성형 AI **Claude Opus 5.5** 의 도움을 받아 만들었음  
+  (Anthropic 사의 Claude Code 로 사용)
+- AI 는 문장 초안, 자료 조사, 오픈소스 설정 옵션 확인, 설문 집계를 맡았음
+- 발표자가 AI 의 결과를 **비판적으로 검토**해 근거를 되묻고,  
+  틀리거나 과장된 내용은 반려하고 고쳐 완성함
+- 검토의 바탕은 발표자의 경험
+  + 리눅스 미들웨어 개발, 드라이버 디버깅, Wi-Fi 및 네트워크 상용 제품 개발, 오픈소스 활동, 유무선 네트워크 연구
+  + 표준 규격(RFC · IEEE 802.1X 등)과 이를 구현한 코드에 대한 이해
+  + 10년 동안 에듀롬을 운영하며 쌓아 온 문제의식
+- 사실 확인과 최종 판단, 내용에 대한 책임은 발표자에게 있음
+:::
+:::
+
+
+## 발표자 — 장민석 · KISTI 과학기술연구망센터 {.fit}
+
+### KISTI 이전 · (주)휴맥스
+
+- **Headless Gateway** 개발  
+  케이블 모뎀, 스위치 · 라우터 · [Wi-Fi]{.wifi-red} 공유기 · 셋톱박스 · 유료 방송 복호화,  
+  [Wi-Fi]{.wifi-red} 미디어 공유 · 자녀 보호(Parental Control)를 한 장비에
+- Qualcomm · Intel · Broadcom · Realtek SoC 기반 제품 개발,  
+  SoC 가 [Wi-Fi]{.wifi-red} 스펙대로 동작하지 않는 것을 확인해 제조사에 보고
+- 미국 2위 · 브라질 1위 유선 통신사 납품 제품 개발
+- 통신사의 기기 [제어 · 모니터링]{.wifi-red}부터  
+  사용자 서비스와 웹 UI 까지 개발 (웹 표준 · 웹 접근성 포함)
+- 미국 · 브라질 · 한국 전파인증 대응, 제품에 들어간 모든 프로토콜의 기능 확인\
+  Ethernet · [Wi-Fi]{.wifi-red} · DOCSIS(케이블 모뎀) · CAS(유료 방송 암호화) · DLNA / UPnP
+
+
+## 발표자 — KISTI 에서 무선 인프라 {.fit}
+
+- 2024 데비안 컨퍼런스(DebConf24, 부산) 네트워크 지원
+- Cisco Catalyst 9800-CL 무선 컨트롤러를 직접 설치 · 운영
+- AP 수가 무료 라이선스 범위라 컨트롤러 기능을 모두 켜고, 그 데이터로 AP 별 접속 단말 · 채널 사용률 대시보드를 구성
+- 정부 공공와이파이 정책 대응 (국회 질의, 과기정통부 현황 보고)
+
+::: columns
+
+::: {.column width="50%"}
+![Cisco 9800-CL 무선 컨트롤러 대시보드](images/dc24-wlc.webp)
+:::
+
+::: {.column width="50%"}
+![AP 별 접속 단말 수 (Grafana)](images/dc24-clients.webp)
+:::
+
+:::
+
+::: ref
+[dc24.kreonet.net/wireless/wlc](https://dc24.kreonet.net/wireless/wlc/) · DC24 Infra Dashboards
+:::
+
+
+## 발표자 — KISTI에서 공공와이파이 정책 대응 {.fit}
+
+::: columns
+
+::: {.column }
+- 국회 에듀롬 질의 대응(2016, 2017), 과기정통부 에듀롬 현황 보고(2017)
+- 당시 공공와이파이는 암호화 없는 개방형 「Public WiFi Free」 만 운영
+- 개진한 의견
+  + 개방형은 가짜 AP 를 만들기 쉬워 위험함
+  + 공유 비밀번호(PSK)보다 WPA2-Enterprise 가 안전함을 안내  
+    (CA 확인절차, 사용자별 세션 키)
+- 이후 WPA2-Enterprise 방식의 「Public WiFi Secure」 가 생김
+
+::: {.callout .warning}
+지금 「Public WiFi Secure」 사용에 공지된 설정은 공용ID (ID:wifi/PW:wifi), `CA인증서: 인증 안 함`. 공용 ID 는 개인을 특정하지 않는 장점이 있지만, 서버 인증서를 확인하지 않으면 가짜 AP 는 그대로 막지 못합니다 (2부와 같은 문제).
+:::
+:::
+
+::: {.column width="25%"}
+![공공와이파이 접속 안내 — Public WiFi Secure](images/public-wifi-secure.webp)
+:::
+
+:::
+
+::: ref
+에듀롬 KR 운영위원회 기록 · [www.wififree.kr](https://www.wififree.kr/pu/si/N021.do) 접속 안내 화면, 2026.11.13. 캡쳐
+:::
+
+
+## 이 자료에서 말하는 것 (요약) {.dense3}
+
+- CA 인증서를 '확인 안 함' 또는 'TOFU' 로 설정하면, 가짜 AP 에도 비밀번호를 넘길 수 있음  
+  (2부 · 5부)
+  + 서버는 언제나 인증서를 보내며 사용함. 「확인 안 함」은 단말이 그것을 검사하지 않을 뿐임
+- 단말이 서버를 확인하려면 CA 인증서와 서버 이름이 필요함, 국내외 사례 (2부 · 5부)
+- 웹용 공인 인증서는 RADIUS 에 맞지 않음, 에듀롬 전용 사설 CA 를 권장 (5부)
+- 참여기관은 CA 인증서와 지문을 안내 페이지에 공개할 의무가 있음 (운영약관, 5부 · 6부)
+- 안내 페이지에는 「대한민국 eduroam 서비스 및 상표 고지」를 게시 (6부)
+  + 공식 웹사이트, 국내 상표 및 권리주체, 해외 상표 및 권리주체
+- 다중캠퍼스는 RFC 5580 위치 속성으로 캠퍼스 · 건물을 RADIUS 기록에 남김 (7부)
+- 국내 참여기관 서버 인증서 점검과 사전 설문 결과 (4부 · 8부)
+
+
+## 오늘 순서 {.fit}
+
+| 내용 | 누구에게 |
+|---|---|
+| **1부** 에듀롬 바로 알기 · 현장 퀴즈 | 모두 |
+| **2부** 안전한 에듀롬 사용법 — 인증서와 가짜 AP | 모두 |
+| **3부** 에듀롬 도입 안내 | 도입 검토 기관 |
+| 쉬는 시간 | |
+| **4부** 대한민국 에듀롬 소식 · 점검 결과 | 운영 담당자 |
+| **5부** 안전한 인증 — 서버 인증서, 계정 · 비밀번호, 운영체제별 서버 확인 | 운영 담당자 |
+| **6부** 안내 페이지 · 고지문 · 기관 정보 | 운영 담당자 |
+| **7부** 다중캠퍼스 위치 · 감사 기록 | 운영 담당자 |
+| **8부** 설문 결과 · 자유 토론 | 모두 |
+
+
+# 1부 · 에듀롬 바로 알기 {short="1 바로 알기"}
+
+---
+
+::: {.lead}
+기관 계정 하나로, 전 세계 연구 · 교육기관의 Wi-Fi 에
+:::
+
+
+## 현장 퀴즈 ① {.center}
+
+### 에듀롬은 언제, 어디서 시작되었을까요?
+
+1. 2003년, 유럽
+2. 2008년, 미국
+3. 2012년, 대한민국
+
+::: {.callout .done}
+**2003년, 유럽.** 유럽 연구망 연합 TERENA(현 GÉANT)에서  
+RADIUS 와 IEEE 802.1X 를 엮어 여섯 나라가 시험망을 만든 것이 출발점입니다.
+:::
+
+
+## 현장 퀴즈 ② {.center}
+
+### 대한민국은 언제, 어느 기관이 글로벌 에듀롬에 가입했을까요?
+
+1. 2012년, 한국과학기술정보연구원 (KISTI/KREONET)
+2. 2015년, 한국교육정보화재단 (KREN)
+3. 2018년, 한국교육학술정보원 (KERIS)
+
+::: {.callout .done}
+**2012년 8월 13일, KISTI.** 에듀롬 준수 선언문에 서명해 KREONET 이  
+대한민국 NRO 가 되었습니다. 대한민국 eduroam 상표도 KISTI 가 보유합니다 (상표등록 제40-1190084호).
+:::
+
+
+## 현장 퀴즈 ③ {.center}
+
+### 대한민국 에듀롬 공식 웹사이트는?
+
+1. [eduroam.kreonet.net](https://eduroam.kreonet.net)
+2. eduroam.kr
+
+::: {.callout .done}
+[**eduroam.kreonet.net**](https://eduroam.kreonet.net) — NRO(KISTI)가 운영합니다. 운영약관 · 연혁 · 참여기관 목록은 [**wiki.eduroam.kreonet.net**](https://wiki.eduroam.kreonet.net) 에 있습니다.
+:::
+
+
+## Wi-Fi Enterprise 인증은 이렇게 동작합니다 {.fit}
+
+::: columns
+
+::: {.column width="70%"}
+<svg class="wfe" viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="에듀롬 사용자 인증 및 인터넷 이용 과정" font-family="Pretendard Variable, Pretendard, sans-serif">
+<defs>
+<marker id="wfe-ah-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#4caf50"/></marker>
+<marker id="wfe-ah-y" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#f0b400"/></marker>
+<marker id="wfe-ah-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3b8fd9"/></marker>
+<symbol id="wfe-key" viewBox="0 0 24 24"><circle cx="8" cy="8" r="6" fill="#e8622c"/><circle cx="7" cy="7" r="2" fill="#fff"/><path d="M12 12 L21 21 M17 17 L15 19 M19.5 19.5 L17.5 21.5" stroke="#e8622c" stroke-width="3" stroke-linecap="round"/></symbol>
+<symbol id="wfe-chk" viewBox="0 0 24 24"><rect x="2" y="4" width="18" height="18" rx="2" fill="#fff" stroke="#333" stroke-width="2"/><path d="M6 13 L11 18 L22 4" fill="none" stroke="#2e9d3a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="wfe-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#cfe6fb" stroke="#3b8fd9" stroke-width="1.5"/><path d="M2 12 H22 M12 2 C7 7 7 17 12 22 M12 2 C17 7 17 17 12 22" fill="none" stroke="#3b8fd9" stroke-width="1.2"/></symbol>
+<symbol id="wfe-no" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="#fff" stroke="#e02424" stroke-width="3"/><path d="M5.5 5.5 L18.5 18.5" stroke="#e02424" stroke-width="3"/></symbol>
+<symbol id="wfe-shield" viewBox="0 0 24 24"><path d="M12 1 L22 5 V11 C22 17 17.5 21.5 12 23 C6.5 21.5 2 17 2 11 V5 z" fill="#2e9d3a"/><path d="M7 12 L11 16 L17 8" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="wfe-db" viewBox="0 0 40 46"><path d="M2 8 V38 C2 46 38 46 38 38 V8" fill="#eaf4fd" stroke="#3b8fd9" stroke-width="2"/><ellipse cx="20" cy="8" rx="18" ry="6" fill="#fff" stroke="#3b8fd9" stroke-width="2"/><circle cx="18" cy="22" r="5" fill="#222"/><path d="M9 38 C9 29 27 29 27 38 z" fill="#222"/><path d="M22 34 L26 38 L33 28" fill="none" stroke="#777" stroke-width="2.4"/></symbol>
+<symbol id="wfe-server" viewBox="0 0 80 96"><path d="M8 22 L16 6 H64 L72 22 z" fill="#f4f4f4" stroke="#666" stroke-width="2.5"/><rect x="8" y="22" width="64" height="22" fill="#fff" stroke="#666" stroke-width="2.5"/><rect x="8" y="44" width="64" height="22" fill="#fff" stroke="#666" stroke-width="2.5"/><rect x="8" y="66" width="64" height="22" fill="#fff" stroke="#666" stroke-width="2.5"/><circle cx="62" cy="33" r="3" fill="#666"/><circle cx="62" cy="55" r="3" fill="#666"/></symbol>
+</defs>
+<!-- 구름: 인터넷 · 기관 업무망 -->
+<g>
+<path d="M300 100 C270 100 268 66 296 62 C298 34 340 26 352 48 C366 30 404 40 400 66 C428 68 428 100 400 100 z" fill="#d7ecfd" stroke="#3b8fd9" stroke-width="3"/>
+<text x="350" y="84" text-anchor="middle" font-size="17" font-weight="600" fill="#1d4f80">인터넷</text>
+<path d="M470 100 C440 100 438 66 466 62 C468 34 510 26 522 48 C536 30 574 40 570 66 C598 68 598 100 570 100 z" fill="#f2f2f2" stroke="#9a9a9a" stroke-width="3"/>
+<text x="520" y="76" text-anchor="middle" font-size="15" fill="#555">기관 업무망</text>
+<text x="520" y="94" text-anchor="middle" font-size="13" fill="#777">(인트라넷)</text>
+</g>
+<!-- 사용자 네트워크 경계 -->
+<line x1="15" y1="160" x2="660" y2="160" stroke="#222" stroke-width="2.5"/>
+<text x="22" y="150" font-size="15" font-weight="700" fill="#222">사용자 네트워크</text>
+<!-- 인터넷 트래픽 (AP → 인터넷), 업무망 차단 -->
+<path d="M650 140 H380 L352 106" fill="none" stroke="#3b8fd9" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#wfe-ah-b)"/>
+<path d="M540 140 L520 104" fill="none" stroke="#9a9a9a" stroke-width="3" stroke-dasharray="6 5"/>
+<use href="#wfe-no" x="518" y="110" width="24" height="24"/>
+<!-- 관리자 네트워크 -->
+<rect x="15" y="172" width="670" height="378" fill="none" stroke="#888" stroke-width="2"/>
+<text x="26" y="196" font-size="15" font-weight="700" fill="#222">관리자 네트워크</text>
+<use href="#wfe-no" x="140" y="182" width="18" height="18"/>
+<text x="162" y="196" font-size="15" font-weight="700" fill="#e02424">사용자 접근 불가</text>
+<!-- 에듀롬 인증 네트워크 -->
+<rect x="28" y="210" width="345" height="328" fill="none" stroke="#777" stroke-width="2" stroke-dasharray="3 4"/>
+<rect x="28" y="210" width="150" height="26" fill="#7a7a7a"/>
+<text x="103" y="228" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">에듀롬 인증 네트워크</text>
+<!-- 인증 서버 두 대 (기관마다 색이 다름) -->
+<use href="#wfe-server" x="40" y="258" width="76" height="92"/>
+<circle cx="78" cy="262" r="10" fill="#d4501c"/><path d="M62 286 C62 268 94 268 94 286 z" fill="#d4501c"/>
+<use href="#wfe-shield" x="102" y="320" width="26" height="28"/>
+<use href="#wfe-server" x="70" y="392" width="76" height="92"/>
+<circle cx="108" cy="396" r="10" fill="#e3a21a"/><path d="M92 420 C92 402 124 402 124 420 z" fill="#e3a21a"/>
+<use href="#wfe-shield" x="132" y="454" width="26" height="28"/>
+<text x="108" y="506" text-anchor="middle" font-size="14" fill="#333">사용자 인증 서버</text>
+<text x="108" y="524" text-anchor="middle" font-size="14" fill="#333">(방문객 소속기관)</text>
+<!-- 에듀롬 로밍 기반시설 -->
+<rect x="225" y="270" width="88" height="88" rx="4" fill="#8f8f8f"/>
+<g stroke="#fff" stroke-width="3"><line x1="269" y1="314" x2="269" y2="286"/><line x1="269" y1="314" x2="245" y2="300"/><line x1="269" y1="314" x2="293" y2="300"/><line x1="269" y1="314" x2="245" y2="330"/><line x1="269" y1="314" x2="293" y2="330"/><line x1="269" y1="314" x2="269" y2="342"/></g>
+<g fill="#fff"><circle cx="269" cy="314" r="8"/><circle cx="269" cy="284" r="5"/><circle cx="243" cy="299" r="5"/><circle cx="295" cy="299" r="5"/><circle cx="243" cy="331" r="5"/><circle cx="295" cy="331" r="5"/><circle cx="269" cy="344" r="5"/></g>
+<use href="#wfe-shield" x="300" y="340" width="26" height="28"/>
+<text x="269" y="388" text-anchor="middle" font-size="14" fill="#333">에듀롬 로밍</text>
+<text x="269" y="406" text-anchor="middle" font-size="14" fill="#333">기반시설</text>
+<!-- 무선 네트워크 컨트롤러 -->
+<rect x="450" y="212" width="128" height="96" fill="#1c9ad6"/>
+<rect x="450" y="212" width="36" height="96" fill="#1786bd"/>
+<path d="M458 230 L478 250 M478 230 L458 250" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+<path d="M458 280 L466 290 L480 266" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="530" cy="250" r="20" fill="none" stroke="#fff" stroke-width="5"/>
+<line x1="516" y1="264" x2="500" y2="282" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+<use href="#wfe-db" x="560" y="282" width="40" height="46"/>
+<text x="514" y="350" text-anchor="middle" font-size="14" fill="#333">무선 네트워크 컨트롤러</text>
+<!-- AP -->
+<path d="M664 128 L656 100 M712 128 L720 100" stroke="#222" stroke-width="4" stroke-linecap="round"/>
+<path d="M640 98 C650 74 666 64 680 62 M736 98 C726 74 710 64 696 62" fill="none" stroke="#222" stroke-width="3"/>
+<path d="M626 104 C638 66 662 52 680 50 M750 104 C738 66 714 52 696 50" fill="none" stroke="#222" stroke-width="3"/>
+<rect x="652" y="128" width="72" height="88" rx="3" fill="#d9d9d9" stroke="#a5a5a5" stroke-width="2"/>
+<rect x="668" y="140" width="40" height="12" fill="#c4c4c4"/>
+<g stroke="#b5b5b5" stroke-width="2"><line x1="668" y1="176" x2="708" y2="176"/><line x1="668" y1="184" x2="708" y2="184"/><line x1="668" y1="192" x2="708" y2="192"/><line x1="668" y1="200" x2="708" y2="200"/></g>
+<!-- 단말 -->
+<rect x="882" y="112" width="56" height="100" rx="8" fill="#e05a12"/>
+<rect x="888" y="124" width="44" height="74" fill="#fff"/>
+<circle cx="910" cy="118" r="2" fill="#fff"/><rect x="902" y="202" width="16" height="4" rx="2" fill="#fff"/>
+<text x="910" y="234" text-anchor="middle" font-size="14" fill="#333">방문 사용자</text>
+<!-- 단말 ↔ AP -->
+<line x1="732" y1="140" x2="872" y2="140" stroke="#3b8fd9" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#wfe-ah-b)"/>
+<use href="#wfe-globe" x="790" y="129" width="22" height="22"/>
+<line x1="732" y1="166" x2="872" y2="166" stroke="#4caf50" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#wfe-ah-g)"/>
+<use href="#wfe-chk" x="760" y="153" width="24" height="24"/>
+<line x1="872" y1="192" x2="732" y2="192" stroke="#f0b400" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#wfe-ah-y)"/>
+<use href="#wfe-key" x="822" y="180" width="24" height="24"/>
+<!-- AP ↔ 컨트롤러 -->
+<line x1="586" y1="226" x2="646" y2="190" stroke="#4caf50" stroke-width="3" stroke-dasharray="8 5" marker-end="url(#wfe-ah-g)"/>
+<use href="#wfe-chk" x="592" y="190" width="22" height="22"/>
+<line x1="646" y1="210" x2="588" y2="244" stroke="#f0b400" stroke-width="3" stroke-dasharray="8 5" marker-end="url(#wfe-ah-y)"/>
+<use href="#wfe-key" x="616" y="222" width="22" height="22"/>
+<!-- 컨트롤러 ↔ 로밍 기반시설 -->
+<line x1="322" y1="290" x2="442" y2="250" stroke="#4caf50" stroke-width="3" stroke-dasharray="8 5" marker-end="url(#wfe-ah-g)"/>
+<use href="#wfe-chk" x="338" y="268" width="22" height="22"/>
+<line x1="442" y1="272" x2="322" y2="312" stroke="#f0b400" stroke-width="3" stroke-dasharray="8 5" marker-end="url(#wfe-ah-y)"/>
+<use href="#wfe-key" x="400" y="280" width="22" height="22"/>
+<!-- 로밍 기반시설 ↔ 인증 서버 -->
+<line x1="126" y1="296" x2="216" y2="296" stroke="#4caf50" stroke-width="3" stroke-dasharray="8 5" marker-end="url(#wfe-ah-g)"/>
+<use href="#wfe-chk" x="146" y="276" width="22" height="22"/>
+<line x1="216" y1="322" x2="126" y2="322" stroke="#f0b400" stroke-width="3" stroke-dasharray="8 5" marker-end="url(#wfe-ah-y)"/>
+<use href="#wfe-key" x="178" y="312" width="22" height="22"/>
+<!-- 범례 -->
+<rect x="705" y="300" width="285" height="250" fill="#fff" stroke="#555" stroke-width="2"/>
+<text x="847" y="326" text-anchor="middle" font-size="15" font-weight="700" fill="#222">범례</text>
+<text x="847" y="350" text-anchor="middle" font-size="13" fill="#555">기관마다 인증 정보의 색을 다르게 표시</text>
+<use href="#wfe-key" x="722" y="368" width="28" height="28"/>
+<text x="766" y="388" font-size="15" fill="#222">사용자 인증 정보 (시도)</text>
+<use href="#wfe-db" x="724" y="410" width="26" height="30"/>
+<text x="766" y="431" font-size="15" fill="#222">사용자 인증 정보 DB</text>
+<use href="#wfe-chk" x="722" y="456" width="28" height="28"/>
+<text x="766" y="468" font-size="15" fill="#222">허가된 사용자 확인,</text>
+<text x="766" y="487" font-size="15" fill="#222">네트워크 접속 허가</text>
+<use href="#wfe-globe" x="724" y="508" width="26" height="26"/>
+<text x="766" y="527" font-size="15" fill="#222">사용자 인터넷 트래픽</text>
+</svg>
+:::
+
+::: {.column width="30%" .dense1}
+**단말**: ID · 비밀번호 전송
+
+**AP · 무선 컨트롤러**:  
+판단 없이 인증 서버로 전달
+
+**인증 서버**(RADIUS):  
+확인 후 허가 · 거절
+
+**허가 후**: 인터넷만 사용, 인증망 · 업무망은 차단  
+:::
+
+:::
+
+::: ref
+IEEE 802.1X (WPA2 · WPA3-Enterprise) · 그림: 에듀롬 KR 가입 안내 (EduroamKR-2018-0003) 그림 1 을 다시 그림
+:::
+
+
+## 에듀롬은 이렇게 동작합니다 {.fit}
+
+```mermaid
+flowchart LR
+  U["방문자 단말<br>hong@my.ac.kr"] --> AP["방문 기관 Wi-Fi<br>(SP)"]
+  AP --> N["국가 로밍<br>NRO · RO"]
+  N --> IDP["소속 기관<br>인증 서버 (IdP)"]
+  IDP -. "승인 / 거절" .-> AP
+```
+
+- 방문 기관은 **@ 뒤의 realm** 만 보고 요청을 소속 기관으로 넘깁니다
+- 비밀번호는 단말과 **소속 기관 서버 사이의 암호화 터널** 안에서만 오갑니다
+- 그래서 ID 는 반드시 **아이디@기관도메인** 전체를 씁니다
+
+::: ref
+RFC 7593 The eduroam Architecture for Network Roaming · RFC 7542 The Network Access Identifier · IEEE 802.1X Port-Based Network Access Control\
+RFC 2865 Remote Authentication Dial In User Service (RADIUS) · RFC 3579 RADIUS Support For Extensible Authentication Protocol (EAP)\
+RFC 6614 Transport Layer Security (TLS) Encryption for RADIUS · RFC 3748 Extensible Authentication Protocol (EAP)\
+RFC 5281 Extensible Authentication Protocol Tunneled Transport Layer Security Authenticated Protocol Version 0 (EAP-TTLSv0)
+:::
+
+
+## 인증서는 서버가 진짜인지 확인합니다 {.fit}
+
+- 인증서는 X.509 형식의 전자 증명서입니다.  
+  CA(인증기관)가 「이 공개키는 이 서버의 것」이라고 서명합니다
+- 목적은 HTTPS 와 같습니다. 사용자 단말이 아니라 **서버**가 위조되지 않았는지 확인합니다
+
+| | HTTPS 웹 | 에듀롬 (802.1X) |
+|---|---|---|
+| 확인하는 서버 | 웹 서버 | 소속 기관 RADIUS 서버 |
+| 서버 이름의 기준 | 주소창의 도메인 | 기관이 안내한 서버 이름 |
+| 믿을 CA | 브라우저에 내장된 목록 | 기관이 안내한 CA |
+| 사용자 확인 | 로그인 | ID · 비밀번호 (터널 안) |
+
+::: {.callout .notice}
+에듀롬에는 주소창이 없습니다.  
+그래서 **CA 와 서버 이름을 단말에 직접 지정**해야 확인이 이루어집니다.
+:::
+
+
+## CA 인증서와 서버 인증서 {.fit}
+
+| | CA 인증서 | 서버 인증서 |
+|---|---|---|
+| 무엇 | 서명한 기관의 인증서, 신뢰의 기준 | RADIUS 서버의 신분증, CA 가 서명 |
+| 유효기간 | 10년 이상 | 1~2년 |
+| 단말에 지정 | **이것을 지정** | 지정하지 않음 |
+
+- RADIUS CA와 서버인증서는 X.509 표준을 준수합니다.  
+  HTTPS 인증서와 동일형식으로 호환됩니다.
+- 단말은 두 가지를 확인합니다.  
+  서버 인증서에 그 CA 의 서명이 있는지, 서버 이름(CN, SAN)이 안내한 값과 같은지
+- 서버 인증서는 자주 바뀌지만 CA 가 같으면 단말 설정은 그대로 둡니다
+
+::: {.callout .warning}
+서버 인증서를 직접 믿게 해 두면 갱신할 때마다 접속이 끊기고 「신뢰하시겠습니까?」가 다시 뜹니다. 기관은 **CA 인증서 · SHA-256 지문 · 서버 이름**을 안내합니다.
+:::
+
+
+## 브라우저는 왜 묻지 않을까요 {.fit}
+
+<div class="chain">
+<span class="chain-node root">루트 CA<small>운영체제 · 브라우저에 내장</small></span>
+<span class="chain-edge">서명</span>
+<span class="chain-node">중간 CA</span>
+<span class="chain-edge">서명</span>
+<span class="chain-node">웹 서버 인증서<small>www.example.com</small></span>
+</div>
+
+- 웹 서버도 접속 때마다 인증서를 보냅니다. 그래도 브라우저는 「신뢰하시겠습니까?」를 묻지 않습니다
+- 운영체제와 브라우저의 **설치 파일 안에 루트 CA 목록이 들어 있기** 때문입니다
+- 서버 인증서에서 서명을 따라 올라가 목록에 있는 루트 CA 에 닿으면 통과하고, 주소창의 도메인과 인증서 이름이 같은지도 자동으로 확인합니다
+
+
+## 루트 CA 목록에 들어가기는 매우 어렵습니다 {.fit}
+
+- Mozilla's CA Certificate Program\
+  [wiki.mozilla.org/CA](https://wiki.mozilla.org/CA)
+- Microsoft Trusted Root Program\
+  [learn.microsoft.com/security/trusted-root/program-requirements](https://learn.microsoft.com/security/trusted-root/program-requirements)
+- Apple Root Certificate Program\
+  [apple.com/certificateauthority/ca_program.html](https://www.apple.com/certificateauthority/ca_program.html)
+- Chrome Root Program\
+  [g.co/chrome/root-policy](https://g.co/chrome/root-policy)
+- Android 시스템 CA 저장소\
+  [android.googlesource.com/platform/system/ca-certificates](https://android.googlesource.com/platform/system/ca-certificates)
+
+
+## 루트 CA 가 되는 조건 {.fit}
+
+- CA/Browser Forum **기본 요건**(Baseline Requirements) 준수
+- **매년 외부 감사** (WebTrust · ETSI)
+- 발급한 인증서를 공개 로그에 기록 (Certificate Transparency)
+- 잘못 발급하면 **공개 사고 보고**
+- 신청부터 포함까지 보통 **수년**
+
+::: {.callout .warning}
+규칙을 어기면 목록에서 빠집니다. 2018 Symantec, 2024 Entrust
+:::
+
+::: ref
+CCADB (Common CA Database, 루트 프로그램 공동 관리 데이터베이스) · [ccadb.org](https://ccadb.org)
+:::
+
+## 에듀롬에서는 그 자동 확인이 통하지 않습니다 {.fit}
+
+- 접속 전의 단말은 IP 가 없고, 인증 서버에 **직접 접속하지 않습니다**. AP · 국가 로밍 · 중계 서버를 거쳐 **건네받은 인증서**만 봅니다
+- 주소창도 없어서, 단말은 어느 서버와 이야기해야 하는지 모릅니다. 서버 IP · 주소로 대조할 수 없습니다
+- 공인 CA 를 믿게 하면 Let's Encrypt 처럼 **누구나 몇 분 만에** 자기 도메인 인증서를 받는 CA 까지 함께 믿게 됩니다
+- 서버 이름을 손으로 넣어야만 막을 수 있고, 공인 CA 의 서버 인증서는 수명이 계속 짧아집니다 (다음 장)
+
+::: {.callout .safety}
+**그래서 에듀롬 전용 사설 CA 를 권고합니다.** 우리 기관 서버에만 발급하고, 10년 이상 그대로 두고, 그 CA 를 안내 페이지에 공개합니다.
+:::
+
+
+## 웹(HTTPS) 서버 인증서의 수명은 계속 짧아집니다 {.fit}
+
+| 발급일 | 공인 CA 서버 인증서 최대 유효기간 |
+|---|---|
+| 2026. 3. 14. 까지 | 398일 |
+| 2026. 3. 15. 부터 | 200일 |
+| 2027. 3. 15. 부터 | 100일 |
+| 2029. 3. 15. 부터 | **47일** |
+
+- 2024년 10월 애플이 제안, 2025년 4월 CA/B Forum 에서 반대 없이 통과
+- **웹(HTTPS) 공인 인증서**에만 적용됩니다. RADIUS 인증서는 이런 국제 기준이 없습니다
+- 웹용으로 산 공인 인증서를 RADIUS 에 그대로 쓰면 이 주기를 따라 바뀝니다 (다음 장)
+
+::: ref
+[CA/B Forum Ballot SC-081v3 — Introduce Schedule of Reducing Validity and Data Reuse Periods](https://cabforum.org/2025/04/11/ballot-sc081v3-introduce-schedule-of-reducing-validity-and-data-reuse-periods/)
+:::
+
+
+## 웹용 공인 인증서를 RADIUS 에 그대로 쓰면 {.fit}
+
+단말이 무엇을 기억하는지는 **CA 종류가 아니라 연결 방식**이 정합니다
+
+| 연결 방식 | 단말이 믿는 것 | 서버 인증서 갱신 때 |
+|---|---|---|
+| OS무관, 프로파일 설치 (CA + 서버 이름) | CA | 그대로 접속 |
+| 안드로이드 「시스템 인증서 사용」 + 도메인 | 시스템 CA 목록 (공인 CA 만) | 그대로 접속 |
+| iOS · macOS 수동 「신뢰」 | 서버 인증서 (CA 가 있어도) | **다시 묻습니다** |
+| Windows 11 수동 「연결」 | 서버 인증서 또는 루트 지문 (문서가 모호) | 시험 필요 |
+| 안드로이드 「처음 사용 시 신뢰」 | 서버 인증서 (루트를 안 보내면) | **끊깁니다** |
+
+- 사설 CA 도 수동 연결이면 똑같습니다. 다른 것은 **갱신 주기**입니다  
+  (공인 웹인증서는 200일에서 47일로 줄고, 사설은 825일 이하로 직접 정하는 것이 가능)
+
+
+## CA 공개는 흔한 일입니다 — KB국민은행 {.fit}
+
+![KB국민은행 인증센터 「인증기관 인증서」](images/ca-notice-kb.png)
+
+::: ref
+[fx.kbstar.com/quics?page=C105368](https://fx.kbstar.com/quics?page=C105368) , 2026.11.12. 캡쳐
+:::
+
+
+## CA 공개는 흔한 일입니다 — 행정전자서명 인증관리센터 {.fit}
+
+![행정전자서명(GPKI) 「인증서 종류 및 용도」](images/ca-notice-gpki.png)
+
+::: ref
+[www.gpki.go.kr/jsp/certInfo/certIntro/certKind/searchCertkind_download.jsp](https://www.gpki.go.kr/jsp/certInfo/certIntro/certKind/searchCertkind_download.jsp) , 2026.11.12. 캡쳐
+:::
+
+
+## 에듀롬 안내 페이지 예 — KISTI {.fit}
+
+![KISTI 에듀롬 안내 페이지 「인증서 정보」](images/ca-notice-kisti.png)
+
+::: ref
+[eduroam.kisti.re.kr](https://eduroam.kisti.re.kr) , 2026.11.12. 캡쳐
+:::
+
+
+## CA 공개는 의무입니다 {.center .fit}
+
+::: punch
+참여기관은 **CA 인증서 · SHA-256 지문 · 서버 이름**을 안내 페이지에 게시합니다
+:::
+
+[운영약관 4.5.2 · 의무 확인서 의무](https://wiki.eduroam.kreonet.net/rules/provisions/#s4-5)
+
+::: {.callout .warning}
+**CA 공개와 고지구문 필요**
+
+**CA 인증서를 설치하지 않거나 인증서 지문을 확인하지 않고 접속하지 마십시오.** 확인을 건너뛰면 **eduroam**이라는 같은 이름으로 위장한 가짜 접속점에 접속할 수 있고, 그 경우 입력한 아이디와 비밀번호가 공격자에게 그대로 넘어갑니다. 위 두 단계를 거치지 않고 접속하는 것에 대한 책임은 이용자 본인에게 있습니다.
+
+:::
+
+
+## 대한민국 에듀롬의 구조 {.fit}
+
+### NRO — 국가 로밍 운영기관 (National Roaming Operator)
+
+- **KISTI (KREONET)** · 나라마다 하나
+- 2012년부터 글로벌 에듀롬과 연결
+- 출연연 · 과기원 · 기타 기관을 직접 연결
+
+### RO — 로밍 운영기관 (Roaming Operator)
+
+- 대학 부문: [(2015년~) 전남대학교](https://wiki.eduroam.kreonet.net/assets/docs/2015-04-15-kisti-jnu-eduroam-mou.pdf), (2024년 11월) 위 기능을 이어받은 **한국교육정보화재단(KREN) eduroam 운영센터**가 운영
+- 대학 RO 에 연결된 대학도 해외 로밍은 NRO 를 거쳐 나갑니다
+
+
+## 국가에듀롬 운영약관 · 상표 고지 {.fit}
+
+- **국가에듀롬 운영약관** — 모든 참여기관에 적용
+- 참여기관은 안내 페이지에 [**「대한민국 eduroam 서비스 및 상표 고지」**](https://wiki.eduroam.kreonet.net/rules/notice/) 를 게시합니다
+
+::: ref
+[wiki.eduroam.kreonet.net/rules/provisions/](https://wiki.eduroam.kreonet.net/rules/provisions/) · [wiki.eduroam.kreonet.net/rules/notice/](https://wiki.eduroam.kreonet.net/rules/notice/)
+:::
+
+::: {.callout .legal}
+<strong>대한민국 eduroam 서비스 및 상표 고지</strong><br>한국과학기술정보연구원(KISTI)의 국가과학기술연구망(KREONET)은 대한민국 에듀롬 국가 로밍 운영기관(NRO)으로서 대학 로밍 운영기관(RO)인 한국교육정보화재단(KREN)과 협력하여 국내외 에듀롬 무선 인증 서비스를 제공합니다. 대한민국 에듀롬 서비스는 2012년 글로벌 에듀롬 운영기관인 GÉANT와의 협약에 따라 KREONET이 운영하며, 국내 에듀롬 상표에 관한 권리(<a href="https://doi.org/10.8080/4020150095410">상표등록 제40-1190084호</a>)는 KISTI가 보유하고 있습니다. 대한민국 에듀롬 공식 웹사이트는 <a href="https://eduroam.kreonet.net">eduroam.kreonet.net</a>입니다. 에듀롬(eduroam, education roaming)은 2003년 유럽 연구망 연합 TERENA(현 GÉANT)에서 시작된 글로벌 Wi-Fi 인증 로밍 서비스로, eduroam 로고와 eduroam®은 <a href="https://eduroam.org/eduroam-trademark-information/">GÉANT Association의 등록상표</a>입니다.
+:::
+
+
+## 안 될 때 먼저 확인할 것 {.fit}
+
+### ID · 비밀번호
+
+- ID 는 **아이디@기관도메인** 전체
+- 에듀롬 비밀번호가 포털 비밀번호와 **다른 기관**도 있습니다
+
+### 프로파일
+
+- 어제까지 동일기기에서 되다가 갑자기 안 되면, 
+  + 가짜 AP 의심
+  + `기관 공식웹사이트에서 CA, 서버인증서 변경사항 확인`
+  + (바뀌었다면) 저장된 프로파일을 **지우고 다시** 설정합니다 (다음 장)
+
+
+## 어제까지 되던 에듀롬이 갑자기 안 되면 {.fit}
+
+- CA 를 지정하지 않고 첫 접속 때 「신뢰」를 누르면,  
+  단말은 대개 CA 가 아니라 **그때 받은 서버 인증서**를 기억해 믿습니다\
+  `TOFU (Trust On First Use, 처음 본 것을 믿는 방식)`
+- 서버 인증서는 유효기간이 짧고, 인증 어플라이언스가 **자동으로 갱신**하기도 합니다
+- 인증서가 바뀌면 단말은 처음 보는 서버로 여겨 접속을 거부하거나 다시 묻습니다
+
+::: {.callout .tip}
+저장된 eduroam 프로파일을 **지우고 다시** 설정합니다. 이때 **CA 를 지정**해 두면 서버 인증서가 바뀌어도 그대로 접속됩니다.
+:::
+
+::: {.callout .notice}
+TOFU 로 접속한다면 첫 접속은 **소속 기관 내부처럼 믿을 수 있는 곳**에서 합니다. 기관이 WIPS(무선 침입 방지 시스템) 로 가짜 AP 를 찾아 막고 있어야 의미가 있고, 그래도 서버 인증서가 바뀔 때마다 다시 믿어야 하므로 **CA 지정보다 약합니다.**
+:::
+
+
+## 해외 · 다른 기관에서 안 될 때 {.fit}
+
+- 우리 기관에서는 되는데 밖에서만 안 되면 **소속 기관 담당 부서**에 알려 주십시오
+  + 일시 · 장소(나라 · 기관) · 기기 종류 · 접속설정 옵션 등을 상세하게
+- 에듀롬 되는 곳 찾기: **eduroam.org**
+
+::: {.callout .tip}
+기관이 안내한 **CA 인증서 · 서버 이름**으로 설정합니다 — 2부에서 다룹니다
+:::
+
+
+## ID 는 두 번 넣습니다 — 익명 ID 와 ID {.fit}
+
+::: columns
+
+::: {.column width="75%"}
+| | 익명 ID (outer identity) | ID (inner identity) |
+|---|---|---|
+| 예 | `anonymous@my.ac.kr` | `hong@my.ac.kr` <br>+ 비밀번호 |
+| 포함 위치 | 맨 바깥, 암호화 없음 | 서버 인증서로 연 암호 터널 안 |
+| 하는 일 | `@` 뒤 기관 이름으로 **갈 곳**을 정함 | 실제 로그인 |
+| 노출 범위 | 방문 기관 · 국내 NRO · 해외 중계 서버 | 소속 기관 인증 서버만 |
+
+::: {.callout .notice}
+로밍 중에 NRO 와 중계 서버가 보는 것은 **익명 ID 뿐**입니다. <br>그래서 `@` 앞은 `anonymous` 로 감추고, `@` 뒤만 소속 기관으로 맞추면 됩니다.
+:::
+:::
+
+::: {.column width="25%" .tcenter}
+<div class="aform">
+<div class="af-title">Add network</div>
+<div class="af-row"><label>SSID</label><div class="af-in">eduroam</div></div>
+<div class="af-row"><label>EAP method</label><div class="af-sel">PEAP</div></div>
+<div class="af-row"><label>Phase 2 authentication</label><div class="af-sel">MSCHAPV2</div></div>
+<div class="af-row"><label>CA certificate</label><div class="af-sel">my.ac.kr eduroam CA</div></div>
+<div class="af-row"><label>Domain</label><div class="af-in">radius.my.ac.kr</div></div>
+<div class="af-row hl-in"><label>Identity <b class="af-tag">ID · inner</b></label><div class="af-in">hong@my.ac.kr</div></div>
+<div class="af-row hl-out"><label>Anonymous identity <b class="af-tag">익명 ID · outer</b></label><div class="af-in">anonymous@my.ac.kr</div></div>
+<div class="af-row"><label>Password</label><div class="af-in">••••••••</div></div>
+<div class="af-btns"><span>Cancel</span><span>Connect</span></div>
+</div>
+:::
+
+:::
+
+
+## 두 ID 의 기관이 다르면 {.fit}
+
+::: columns
+
+::: {.column width="62%"}
+- 방문 연구원은 나라마다 계정이 생깁니다\
+  국내 `hong@my.ac.kr`, 미국 `hong@us.edu`
+- 익명 ID 는 국내, ID 는 미국으로 넣으면 요청은 `@` 뒤를 따라 **한국 기관**으로 갑니다
+- 터널은 한국 기관 서버에서 풀리고, 그 서버가 미국 계정 ID 와 비밀번호를 받아 봅니다
+- 한국 기관에는 없는 계정이므로 로그인은 **실패**합니다
+:::
+
+::: {.column width="38%" .tcenter}
+<div class="aform">
+<div class="af-title">Add network</div>
+<div class="af-row"><label>SSID</label><div class="af-in">eduroam</div></div>
+<div class="af-row"><label>EAP method</label><div class="af-sel">PEAP</div></div>
+<div class="af-row"><label>Phase 2 authentication</label><div class="af-sel">MSCHAPV2</div></div>
+<div class="af-row"><label>CA certificate</label><div class="af-sel">my.ac.kr eduroam CA</div></div>
+<div class="af-row"><label>Domain</label><div class="af-in">radius.my.ac.kr</div></div>
+<div class="af-row hl-bad"><label>Identity <b class="af-tag">ID · 미국</b></label><div class="af-in">hong@us.edu</div></div>
+<div class="af-row hl-bad"><label>Anonymous identity <b class="af-tag">익명 ID · 국내</b></label><div class="af-in">anonymous@my.ac.kr</div></div>
+<div class="af-row"><label>Password</label><div class="af-in">•••••••• (미국 계정)</div></div>
+<div class="af-btns"><span>Cancel</span><span>Connect</span></div>
+</div>
+:::
+
+:::
+
+
+## 비밀번호가 엉뚱한 서버에 남습니다
+
+- 암호 터널은 터널을 연 서버까지만 보호합니다
+- 그 서버에서 터널 안 내용이 그대로 풀립니다
+  - TTLS-PAP: 비밀번호가 **평문**으로
+  - PEAP: 비밀번호의 해시가
+- 실패 기록과 함께 그 기관 인증 서버 로그에 남을 수 있습니다
+
+
+## 실제 사례 — 미국에서 8번 모두 실패 {.fit}
+
+- 앞 장과 같은 설정으로, 미국 현지 세 기관에서 8번 시도했고 **8번 모두 실패**했습니다
+- 요청은 매번 해외 중계 서버와 국내 NRO 를 거쳐 국내 기관까지 왔다가 거절됐습니다
+- 익명 ID 자리에 `anonymous` 대신 **국내 실제 ID** 를 넣어, 그 ID 가 국내 · 해외 중계 서버 로그에 남았습니다
+
+::: {.callout .safety}
+**익명 ID 와 ID 는 같은 기관 도메인으로**\
+예) ID `hong@my.ac.kr` → 익명 ID `anonymous@my.ac.kr` 또는 비움
+
+계정이 둘이어도 **하나만** 고르면 됩니다. 어느 계정이든 전 세계에서 씁니다.
+:::
+
+::: ref
+NRO 인증 로그 분석 (2026. 10. 13. ~ 10. 27.), 사용자 · 기관 정보는 익명 처리
+:::
+
+
+# 2부 · 안전한 에듀롬 사용법 {short="2 안전하게"}
+
+---
+
+::: {.lead}
+「인증서를 신뢰하시겠습니까?」 — 그냥 누르셨나요?
+:::
+
+
+## 어떻게 설정하고 계시나요? {.fit}
+
+:::columns
+
+:::column
+
+- ① 확인 안 함 (CA 를 지정하지 않음)
+- ② TOFU (처음 받은 서버 인증서를 믿음)
+- ③ 기관이 고지한 CA 를 지정
+- ④ 기관이 고지한 인스톨러(MDM) 사용
+
+---
+
+- 단말이 묻는 것: **「지금 비밀번호를 받으려는 이 서버가 정말 우리 기관 서버입니까?」**
+- 에듀롬 이름(SSID)은 **누구나** 만들 수 있습니다
+- 확인 없이 누르면, 가짜 eduroam AP 에도 **비밀번호(또는 그 해시)를 넘깁니다**
+
+::: {.callout .danger}
+가짜 AP 는 라즈베리파이, 노트북 한 대로 만들 수 있습니다. 학회장 · 세미나실 · 공항 · 카페처럼 사람이 많은 곳이 표적입니다.
+:::
+:::
+
+::: {.column width="38%" .tcenter}
+<div class="aform">
+<div class="af-title">Add network</div>
+<div class="af-row"><label>SSID</label><div class="af-in">eduroam</div></div>
+<div class="af-row"><label>EAP method</label><div class="af-sel">PEAP</div></div>
+<div class="af-row"><label>Phase 2 authentication</label><div class="af-sel">MSCHAPV2</div></div>
+<div class="af-row"><label>CA certificate</label><div class="af-sel"></div></div>
+<div class="af-row"><label>Domain</label><div class="af-in"></div></div>
+<div class="af-row"><label>Identity</label><div class="af-in"></div></div>
+<div class="af-row"><label>Anonymous identity</label><div class="af-in"></div></div>
+<div class="af-row"><label>Password</label><div class="af-in"></div></div>
+<div class="af-btns"><span>Cancel</span><span>Connect</span></div></div>
+:::
+:::
+
+
+## 이렇게 설정하면 안 됩니다 {.fit}
+
+::: columns
+
+::: {.column width="62%"}
+- **CA 인증서 「Do not validate」 · 「(Unspecified)」**\
+  어떤 서버든 믿습니다. 가짜 eduroam AP 에 비밀번호(또는 그 해시)를 넘깁니다
+- **도메인(서버 이름) 비움**\
+  같은 CA 가 발급한 남의 서버도 통과합니다
+- **익명 ID 에 다른 기관 도메인**\
+  요청이 그 기관으로 가서 실패하고, 그 기관 서버가 ID · 비밀번호를 받아 봅니다
+
+::: {.callout .danger}
+「일단 연결되게」 고른 설정이 그대로 남아 있는 경우가 가장 많습니다
+:::
+:::
+
+::: {.column width="38%" .tcenter}
+<div class="aform">
+<div class="af-title">Add network</div>
+<div class="af-row"><label>SSID</label><div class="af-in">eduroam</div></div>
+<div class="af-row"><label>EAP method</label><div class="af-sel">PEAP</div></div>
+<div class="af-row"><label>Phase 2 authentication</label><div class="af-sel">MSCHAPV2</div></div>
+<div class="af-row hl-bad"><label>CA certificate <b class="af-tag">✗ 확인 안 함</b></label><div class="af-sel">Do not validate</div></div>
+<div class="af-row hl-bad"><label>Domain <b class="af-tag">✗ 비움</b></label><div class="af-in"><span class="af-ph">(비어 있음)</span></div></div>
+<div class="af-row"><label>Identity</label><div class="af-in">hong@my.ac.kr</div></div>
+<div class="af-row hl-bad"><label>Anonymous identity <b class="af-tag">✗ 다른 기관</b></label><div class="af-in">anonymous@other.ac.kr</div></div>
+<div class="af-row"><label>Password</label><div class="af-in">••••••••</div></div>
+<div class="af-btns"><span>Cancel</span><span>Connect</span></div></div>
+:::
+
+:::
+
+
+## 해결은 간단합니다 — 세 칸만 채우기 {.fit}
+
+::: columns
+
+::: {.column width="62%"}
+- ① **CA 인증서**: 기관이 안내한 CA 지정 (「확인 안 함」 금지)
+- ② **도메인(서버 이름)**: 기관이 안내한 값 입력
+- ③ **익명 ID**: `anonymous@기관도메인`, 잘 모르겠으면 **비워 둡니다**\
+  비우면 ID 가 바깥에도 그대로 실립니다. 길은 늘 맞고, 감추느냐 드러내느냐의 선택입니다
+
+::: {.callout .notice}
+기관 안내 페이지에 CA 인증서와 서버 이름이 없다면, 담당 부서에 요청해 주십시오. 게시는 운영약관상 **의무**입니다.
+:::
+:::
+
+::: {.column width="38%" .tcenter}
+<div class="aform">
+<div class="af-title">Add network</div>
+<div class="af-row"><label>SSID</label><div class="af-in">eduroam</div></div>
+<div class="af-row"><label>EAP method</label><div class="af-sel">PEAP</div></div>
+<div class="af-row"><label>Phase 2 authentication</label><div class="af-sel">MSCHAPV2</div></div>
+<div class="af-row hl-in"><label>CA certificate <b class="af-tag">① CA</b></label><div class="af-sel">my.ac.kr eduroam CA</div></div>
+<div class="af-row hl-in"><label>Domain <b class="af-tag">② 서버 이름</b></label><div class="af-in">radius.my.ac.kr</div></div>
+<div class="af-row"><label>Identity</label><div class="af-in">hong@my.ac.kr</div></div>
+<div class="af-row hl-in"><label>Anonymous identity <b class="af-tag">③ 익명 ID</b></label><div class="af-in">anonymous@my.ac.kr</div></div>
+<div class="af-row"><label>Password</label><div class="af-in">••••••••</div></div>
+<div class="af-btns"><span>Cancel</span><span>Connect</span></div></div>
+:::
+
+:::
+
+
+# 3부 · 에듀롬 도입 안내 {short="3 도입"}
+
+---
+
+::: {.lead}
+우리 기관도 에듀롬을 하려면
+:::
+
+
+## 참여 형태 — 두 가지 중 고르면 됩니다 {.fit}
+
+### 용어 설명
+
+- **IdP** (Identity Provider): 계정을 발급하고 관리하는 곳
+- **SP** (Service Provider): AP 와 SSID 를 제공하는 곳
+
+### 가입 형태
+
+- **IdP + SP**: 구성원은 전 세계에서, 방문자는 우리 기관에서 접속
+- **SP 전용**: 방문자에게 접속서비스 제공 (컨벤션센터 등)
+- **IdP 전용은 없음**. 상호호혜 원칙.
+
+
+## 가입 절차 {.fit}
+
+1. **신청** — 출연연 · 기타 기관은 NRO(KISTI)에 직접, 대학은 대학 RO(KREN)
+2. **연결** — 기관 RADIUS 를 NRO · RO 와 연결하고 시험 접속
+3. **안내 페이지** — 국문 · 영문, 고지문, CA 인증서 · 지문 (템플릿 제공)
+4. **기관 정보 등록** — 담당부서 연락처를 참여기관 목록에 공개
+
+::: {.callout .question}
+**문의**\
+KISTI 과학기술연구망센터 사무국
+:::
+
+::: {.callout .tip}
+현장 설문 「도입 검토 기관」에 궁금한 점을 남기시면 따로 연락드립니다
+:::
+
+
+# 4부 · 대한민국 에듀롬 소식 {short="4 소식"}
+
+---
+
+::: {.lead}
+운영 담당자 세션 — 점검 결과를 함께 봅니다
+:::
+
+
+## NRO 오픈소스 전환 - 웹사이트 개편 및 코드 공개{.fit}
+
+| Web Site<br>(GitHub Pages) | GitHub<br>[github.com/eduroam-kr](https://github.com/eduroam-kr/) | 목적 |
+|---|---|---|
+| https://eduroam.kreonet.net | [eduroam-kr-nro-web](https://github.com/eduroam-kr/eduroam-kr-nro-web) | 공식 웹사이트 |
+| https://db.eduroam.kreonet.net | [eduroam-kr-db](https://github.com/eduroam-kr/eduroam-kr-db) | 서비스지도, 공개관리정보 |
+| https://wiki.eduroam.kreonet.net | [eduroam-kr-wiki](https://github.com/eduroam-kr/eduroam-kr-wiki) | 약관, 연혁, 기술문서 |
+
+<br>
+
+* GitHub Pages 기반 정적 호스팅 (웹서버 = GitHub 서버)
+* 운영약관 · 규정 등의 `원본은 웹페이지`, 모든 문서의 변경 이력은 GIT으로 공개
+  + https://wiki.eduroam.kreonet.net/rules/provisions/
+  + https://github.com/eduroam-kr/eduroam-kr-wiki/commits/main/_docs/rules/provisions.md
+* 템플릿 제공
+  + (원본) https://github.com/eduroam-kr/onepage-html-site-theme
+  + (복제/수정) https://github.com/kisti/eduroam.kisti.re.kr
+  + (게시) https://eduroam.kisti.re.kr
+
+## NRO 오픈소스 전환 - NRO 운영 코드 및 설정 공개 {.fit}
+
+https://github.com/eduroam-kr/kr-nro-docker
+
+::: columns
+::: {.column width="50%"}
+```
+├── README.md
+├── docker-compose.yml
+├── docs # LLM 용 메모리, 공개지식
+│   ├── blackhole.md
+│   ├── logging.md
+│   ...
+├── freeradius
+│   ├── blackhole.conf
+│   ├── conf.d # 기관별 설정
+│   │   ├── dcckorea.or.kr.conf
+│   │   ├── dgist.ac.kr.conf
+│   │   ├── kaist.ac.kr.conf
+│   │   ├── nims.re.kr.conf
+│   │   ├── postech.ac.kr.conf
+│   │   ...
+│   ├── kren_ro.conf
+```
+:::
+
+::: {.column width="50%"}
+```
+├── private/secrets.d # 민감정보, 동기화 안함
+│       ├── dcckorea.or.kr.cfg
+│       ├── dgist.ac.kr.cfg
+│       ├── kaist.ac.kr.cfg
+│       ├── nims.re.kr.cfg
+│       ├── postech.ac.kr.cfg
+│       ...
+...
+```
+:::
+:::
+
+ 
+## 운영약관 v1.2 (2026. 10. 27.)
+
+- 3.1.8 인증정보 관리 — 추측 가능한 초기 비밀번호 금지
+- 4.5.2 CA 인증서 · 지문 · 서버 이름 게시
+- 1.4.2 RO 를 거쳐 연결된 기관에도 적용
+
+
+## 로밍 운영의 딜레마 — 옆 서버는 믿어야 합니다 {.fit}
+
+- 로밍 서버는 **바로 옆에 붙은 서버**(NRO, RO, 해외 ETLR)를 믿어야 동작합니다
+- 옆 서버를 막으면 한 사용자가 아니라 그 뒤에 연결된 **기관 전체**가 끊깁니다
+- 실패가 많다는 것만으로 악성인지 판단할 수 없고, 판단해서도 안 됩니다
+  - 비밀번호 입력 실수, 비밀번호 만료
+  - EAP 방식 · 인증서 · realm 같은 협상 설정 오류
+  - 실패한 단말이 계속 다시 시도함. 재시도 횟수는 그 단말의 문제입니다
+
+::: {.callout .warning}
+대시보드에 거절이 쌓이면 공격처럼 보입니다.  
+대부분은 설정이 틀린 단말 몇 대입니다.
+:::
+
+
+## 로밍 운영 사례 — 「NRO 가 막는 것 아닌가요?」 {.fit}
+
+- 대학 로밍(KREN) 담당자 문의 (2026년 10월):  
+  해외 사용자 요청에 「Request Denied」 거절이 많다
+
+| KREN 경유 해외 사용자 요청 (10. 15. ~ 10. 27.) | 건수 |
+|---|---|
+| 전체 | 2,292,943 |
+| 성공 | 650,802 |
+| 거절 | 1,642,141 (71.6%) |
+| 그중 해외 홈 서버의 거절 | 거절의 99.5% |
+| 그중 NRO 의 거절 (라우팅할 수 없는 realm: \*.local, \*.guest, 도메인 오타) | 거절의 0.4% |
+
+- 「Request Denied」는 해외 ETLR 이 보낸 거절 패킷의 Reply-Message (RFC 2865, 타입 18) 문구입니다. NRO 는 바꾸지 않고 전달했습니다 (패킷 캡처로 확인)
+- 거절률은 매일 67~76% 로 일정합니다
+
+
+## 로밍 운영 사례 — 거절의 대부분은 단말 몇 대 {.fit}
+
+- (사용자, MAC) 25,430쌍 중 12,676쌍은 기간 내 **성공 0회**, 이들이 거절의 **82%**
+- 상위 100쌍이 거절의 **36%**. 한 단말이 11일간 41,334회, 시간당 약 150회 시도
+- 원인은 비밀번호 만료, 인증서 · realm 설정 오류로 추정합니다. 홈 IdP 의 거절이라 국내에서는 고칠 수 없습니다
+
+::: {.callout .safety}
+AP · 무선 컨트롤러에서 반복 실패 단말을 일정 시간 제외(client exclusion)하면 거절 로그와 해외 트래픽이 함께 줄어듭니다.
+:::
+
+
+## 로밍 운영 — anonymous@realm 은 공격이 아닙니다 {.fit}
+
+- 익명 ID 를 바르게 설정한 단말은 바깥에 `anonymous@realm` 만 보냅니다
+- 방문 기관 · NRO · 중계 서버 로그에는 같은 `anonymous@realm` 이 끝없이 찍힙니다
+  - 성공해도 「같은 ID 로 여러 명이?」, 실패가 쌓여도 「누가 대입 공격을?」처럼 보입니다
+- 실제 ID 는 **그 realm 의 홈 IdP 만** 볼 수 있습니다. 중간에서 보이지 않는 것이 정상입니다
+- 사용자를 나눠 보려면 홈 IdP 가 CUI (Chargeable-User-Identity, RFC 4372, 사용자별 가명 값)를 돌려주도록 합니다
+
+::: {.callout .tip}
+「해킹 시도 같다」는 문의가 실제로 들어옵니다. 먼저 익명 ID 인지 확인합니다.
+:::
+
+
+# 5부 · 안전한 인증 {short="5 인증"}
+
+---
+
+::: {.lead}
+① 서버 인증서 · ② 계정과 비밀번호 · ③ 참여기관 유의사항 · ④ 운영체제별 서버 확인
+:::
+
+
+## ① 「CA 를 쓰지 않는다」는 없습니다 {.fit}
+
+- PEAP · EAP-TTLS 서버는 접속 때마다 서버 인증서를 보내고, 인증서에는 언제나 **발급자(CA)** 가 있습니다. 자체 서명이면 그 인증서 자신이 CA 입니다
+- 「CA 미사용」「인증서 사용 안 함」은 단말이 **확인하지 않는다**는 뜻입니다. 같은 SSID 를 띄운 가짜 AP 도 그대로 통과합니다
+
+::: {.callout .warning}
+**사전 설문** 8곳 — 「인증서 확인 안 함」 안내 **6곳** · 안내 없음 **2곳** · CA 와 서버 이름까지 안내 **0곳**\
+**의무 확인서 C** — 「CA 미사용」 등을 이유로 게시하지 않거나 해당 없음으로 답한 곳 **3곳**
+:::
+
+::: {.callout .safety}
+**지금 할 일** (운영약관 4.5.2)\
+서버 인증서의 발급자(Issuer)를 확인하고, 그 **CA 인증서 · SHA-256 지문 · 서버 이름**을 게시합니다. 자체 서명이면 그 인증서를 게시합니다\
+`openssl x509 -in ca.pem -noout -fingerprint -sha256`
+:::
+
+
+## ① 업체 기본 인증서를 그대로 쓰면 {.fit}
+
+- 같은 제품을 산 기관이 **같은 개인키 · 같은 일련번호 · 같은 발급 시각**
+- 22개 realm: 2016년 발급, **RSA 1024비트**, 유효기간 수십 년
+- 다른 국산 제품(AirFRONT · Anyclick AUS · BaseinWPA · SecuU)은 설치할 때 **기관마다 새 키**를 만듭니다 — 문제는 제품이 아니라 **설치 방식**
+
+::: {.callout .warning}
+**사전 설문** — 「업체 기본 인증서 그대로」\
+8곳 중 **3곳** (모름 3곳)
+:::
+
+::: {.callout .safety}
+**지금 할 일**\
+업체에 「우리 기관 전용 키와 인증서로 바꿔 달라」고 요청하십시오. 유지보수 계약 범위입니다.
+:::
+
+::: {.callout .notice}
+바꾸면 CA 도 바뀝니다. **지금 제대로 설정한 사용자도** 프로파일을 지우고 다시 설정해야 하므로, 교체 날짜 · 새 CA · 지문을 미리 공지합니다.
+:::
+
+
+## ① RADIUS 인증서의 유효기간 {.fit}
+
+- CA/B Forum 의 기한(200일 → 47일)은 웹 공인 인증서용입니다. **RADIUS 서버 인증서에는 국제 기준이 없습니다**
+- Jisc · GÉANT 에듀롬 위키의 권고
+  - 에듀롬 전용 사설 CA 를 두고, CA 는 **매우 길게** 잡습니다. 교체하면 모든 사용자가 다시 설정해야 하기 때문입니다
+  - 서버 인증서는 Apple 기준에 맞춰 **825일 이하**
+
+| | 권장 |
+|---|---|
+| 에듀롬 전용 사설 CA | 10~20년. 바꾸면 모든 사용자가 프로파일을 다시 설정 |
+| 서버 인증서 | 825일(약 2년 3개월) 이하. CA 가 같으면 바꿔도 단말 설정은 그대로 |
+
+::: ref
+[GÉANT wiki — EAP Server Certificate considerations](https://wiki.geant.org/spaces/H2eduroam/pages/121346323/EAP+Server+Certificate+considerations) · [GÉANT CBP-33 Server Certificate Practices in eduroam](https://archive.geant.org/projects/gn3/geant/services/cbp/Documents/cbp-33_server-certificate-practices-in-eduroam.pdf)\
+825일: Apple, 「[Requirements for trusted certificates in iOS 13 and macOS 10.15](https://support.apple.com/en-us/103769)」 (2019년 7월 1일 이후 발급한 TLS 서버 인증서)
+:::
+
+
+## ① 너무 길면 단말이 막을까요 {.fit}
+
+| 운영체제 | 서버 인증서 최대 기간 검사 |
+|---|---|
+| iOS · macOS | EAP 검증 정책에는 없습니다. 825일 · 398일 검사는 HTTPS 정책에만 있습니다 |
+| 안드로이드 · 리눅스 | wpa_supplicant 검증은 유효기간 안에 있는지만 봅니다 |
+| Windows | 공식 문서에 최대 기간 제한이 없습니다 |
+
+- GÉANT 위키는 「Apple 은 825일을 넘으면 믿지 않는다」고 적었지만, Apple 공개 소스의 EAP 정책에는 그 검사가 없습니다. 바뀔 수 있으므로 서버 인증서는 **825일 이하**가 안전합니다
+- Apple 은 서버 인증서에 확장 키 용도(EKU)가 있으면 **serverAuth** 를 요구합니다
+- 만료된 서버 인증서는 모든 단말이 거절합니다. 만료일을 달력에 적어 둡니다
+
+::: ref
+Apple 공개 소스 Security — [SecPolicy.c](https://github.com/apple-oss-distributions/Security/blob/main/OSX/sec/Security/SecPolicy.c) (SecPolicyCreateEAP, set_ssl_validity_periods)
+:::
+
+
+## ② 계정 · 비밀번호 — 운영약관 3.1.8 {.fit}
+
+- **(필수)** 생년월일 · 주민등록번호 일부 · 학번 · 사번 · 전화번호처럼 **추측할 수 있는 값**을 초기 비밀번호로 쓰지 않습니다\
+  `사번1a` 처럼 덧붙이거나 순서를 바꾼 것도 같습니다
+- **(필수)** 모든 사용자에게 같은 초기 비밀번호를 주지 않습니다
+- **(필수)** 1인 1계정 — 공용 계정 금지
+- **(권장)** 반복된 인증 실패 탐지 · 제한
+- **(필수)** 유출이 의심되면 즉시 정지하고 NRO 에 통보
+
+::: {.callout .warning}
+**사전 설문**\
+추측 가능한 값으로 발급한 적 있음 **1곳**\
+발급 규칙을 웹에 공개 **1곳**\
+반복 실패 탐지 없음 **3곳** (모름 1곳)
+:::
+
+
+## ② 비밀번호 저장과 EAP 방식
+
+| | PEAP-MSCHAPv2 | TTLS-PAP · GTC | EAP-TLS |
+|---|---|---|---|
+| 서버에 저장 | **NT 해시** 또는 평문 | 솔트 해시 가능 | 비밀번호 없음 |
+| 개인정보 안전성 확보조치 기준 | 맞추기 어려움 | 맞출 수 있음 | 해당 없음 |
+| 인증서 확인 안 하는 단말이 가짜 AP 에 붙으면 | 해시가 넘어감 (해독 가능) | **평문**이 넘어감 | 넘어갈 비밀번호 없음 |
+| 사전 설문 (8곳) | 4 | 3 | 0 (모름 1) |
+
+::: punch
+어느 방식이든 **단말의 서버 인증서 확인**이 전제입니다.
+:::
+
+
+## ② 포털 비밀번호를 그대로 쓰면 {.fit}
+
+- 에듀롬 SSID 가 있는 곳이면 **전 세계 어디서든** 우리 기관 인증 서버로 로그인 시도를 보낼 수 있습니다
+- 요청은 방문 기관 · RO · NRO · 해외 중계 서버를 거쳐 그대로 도착합니다. 중간 서버는 실패가 많다는 이유로 막지 않습니다 (4부 「로밍 운영의 딜레마」)
+- 인증 서버에는 공격자의 IP 주소가 보이지 않습니다. 바로 앞 중계 서버 주소와, 바꿀 수 있는 MAC 주소만 보입니다
+- 방문 기관의 무선 컨트롤러 · AP 가운데 반복 실패 단말을 막지 못하거나 그 기능을 꺼 둔 곳이 많습니다
+
+::: {.callout .danger}
+에듀롬 비밀번호가 포털 · 메일 · 그룹웨어와 같으면, 에듀롬은 **중요 시스템의 비밀번호를 맞혀 볼 수 있는 창구**가 됩니다.
+:::
+
+
+## ② 가능한 공격 ① — 맞혀 보기 {.fit}
+
+| 공격 | 방법 | 결과 |
+|---|---|---|
+| 사전 대입 (dictionary) | 흔한 비밀번호 목록을 한 계정에 계속 시도 | 포털 비밀번호 획득 |
+| 비밀번호 분사 (password spraying) | 비밀번호 하나를 많은 계정에 조금씩 시도. 계정당 횟수가 적어 잠금에 걸리지 않음 | 약한 계정 여럿 획득 |
+| 유출 비밀번호 대입 (credential stuffing) | 다른 사이트에서 유출된 이메일 · 비밀번호 쌍을 시도 | 비밀번호를 재사용한 계정 획득 |
+| 계정 잠금 유발 | 일부러 틀려 포털 계정을 잠금 | 포털 · 메일 · 학사 시스템 사용 불가 (서비스 거부) |
+
+- 에듀롬 ID 는 대개 **이메일 주소와 같아서** 공격 대상 목록을 구하기 쉽습니다
+- 성공한 시도는 정상 로그인과 구분되지 않습니다
+
+
+## ② 가능한 공격 ② — 가로채기 {.fit}
+
+| 공격 | 방법 | 결과 |
+|---|---|---|
+| 가짜 eduroam AP (evil twin) | 서버 인증서를 확인하지 않는 단말을 끌어들임 | TTLS-PAP 는 **평문 비밀번호**, PEAP 는 MSCHAPv2 응답 |
+| MSCHAPv2 해독 | 가로챈 응답을 오프라인으로 해독. 약한 비밀번호는 사전으로, 강한 비밀번호도 DES 키 탐색으로 | NT 해시 복구 |
+| NT 해시 재사용 (pass-the-hash) | 비밀번호를 몰라도 NT 해시로 Windows · Active Directory 인증 | 도메인 계정 장악 |
+| 엉뚱한 서버로 전달 | 익명 ID 에 다른 기관 도메인 (1부 사례) | 다른 기관 서버가 ID · 비밀번호를 받아 봄 |
+
+- 에듀롬 비밀번호가 Active Directory 비밀번호와 같으면, 가로챈 NT 해시가 곧 **도메인 자격 증명**입니다
+
+::: ref
+Moxie Marlinspike · David Hulton, 「Defeating PPTP VPNs and WPA2 Enterprise with MS-CHAPv2」, DEF CON 20 (2012) · [github.com/moxie0/chapcrack](https://github.com/moxie0/chapcrack)
+:::
+
+
+## ② 가능한 공격 ③ — 저장된 곳에서 꺼내기 {.fit}
+
+- **인증 서버**: PEAP 를 위해 NT 해시(솔트 없는 MD4)나 평문을 따로 저장합니다. 이 서버가 뚫리면 포털 비밀번호가 함께 드러납니다
+- **단말**: 노트북 · 휴대폰 · 공용 PC 에 Wi-Fi 비밀번호가 저장돼 있습니다. 분실 · 도난 · 백업, 관리자 권한 도구로 꺼낼 수 있습니다
+- **비밀번호를 바꾼 뒤**: 단말이 옛 비밀번호로 계속 시도해 포털 계정까지 잠깁니다 (4부 사례와 같은 반복 실패)
+
+::: {.callout .warning}
+포털과 같은 비밀번호라면, 인증 서버나 단말 가운데 하나만 뚫려도 **포털 · 메일 · 그룹웨어**가 함께 열립니다.
+:::
+
+
+## ② 그래서 — 에듀롬 비밀번호는 따로 {.fit}
+
+- 에듀롬 전용 비밀번호를 **포털과 따로** 둡니다
+- 반복 실패 탐지 · 제한은 **홈 IdP 가** 합니다. 중간(NRO)은 막을 수 없습니다. 잠금은 포털이 아니라 에듀롬 계정에만 걸리게 합니다
+- 가능하면 EAP-TLS (기기 인증서). 넘어갈 비밀번호 자체가 없습니다
+- 단말의 서버 인증서 확인과 익명 ID 로 가로채기를 막습니다
+
+::: {.callout .notice}
+Oxford 대학(Remote Access 계정), 스웨덴 Mid Sweden 대학, 체코 CTU, 슬로바키아 TU Košice 등은 에듀롬 전용 비밀번호를 따로 둡니다.
+:::
+
+
+## ② 운영자 점검 — 남의 기관 ID 를 다시 내보내지 않기 {.fit}
+
+1부 사례의 원인은 **IdP 설정**입니다.
+
+- 터널 안의 ID 가 우리 realm 이 아닌데, IdP 가 그 요청을 **다시 밖으로 프록시**
+- FreeRADIUS 기본 inner-tunnel 은 realm 을 다시 찾으므로, DEFAULT realm 이 있으면 밖으로 나갑니다
+
+inner-tunnel `authorize` 맨 앞
+
+```
+if (&User-Name !~ /@(.+\.)?example\.ac\.kr$/i) {
+	reject
+}
+update control {
+	&Proxy-To-Realm := LOCAL
+}
+```
+
+바깥 ID 와 안쪽 ID 의 realm 이 다르면 거절하는 정책도 권장합니다.
+
+
+## ③ 참여기관 유의사항 — 가짜 eduroam AP 탐지 및 제거 {.fit}
+
+- eduroam 이라는 SSID 는 **누구나** 띄울 수 있습니다. 캠퍼스 안의 가짜 AP 는 사용자 ID · 비밀번호를 노리는 중간자 공격(MITM)의 출발점입니다
+- 기관 Wi-Fi 를 운영한다면 **WIPS**(Wireless Intrusion Prevention System, 무선 침입 방지 시스템)를 갖춥니다
+  - 우리 기관 AP 가 아닌 **eduroam SSID 를 탐지**
+  - 그 AP 의 **위치를 추적**
+  - 접속을 **차단**하고 현장에서 제거
+
+::: {.callout .warning}
+사용자 단말의 CA 확인이 첫째 방어선, WIPS 가 둘째 방어선입니다. 둘 중 하나만으로는 부족합니다.
+:::
+
+
+## ④ 운영체제별 서버 확인 — 한눈에 {.fit}
+
+| 운영체제 | 고를 수 있는 가장 느슨한 선택 | 그때 단말이 믿는 것 |
+|---|---|---|
+| 안드로이드 순정 13 이상 | 처음 사용 시 신뢰 (TOFU, 지원 단말만) | 루트 CA 또는 서버 인증서 |
+| 안드로이드 순정 11 QPR1 ~ 12 | 없음. CA 지정이 강제됨 | 지정한 CA |
+| 안드로이드 일부 제조사 단말 | 「검증 안 함」이 남아 있는 경우 | 아무것도 확인하지 않음 |
+| iOS · macOS | 「신뢰」 (TOFU) | 서버 인증서 |
+| Windows 11 | 확인 창에서 「연결」 (TOFU) | 서버 인증서 지문 |
+| 리눅스 (NetworkManager) | 「CA 인증서 필요 없음」 | 아무것도 확인하지 않음 |
+
+::: {.callout .warning}
+같은 안내문 한 장으로는 모든 단말을 다루지 못합니다. 사용자가 무엇을 골랐는지는 운영체제와 버전, 제조사에 따라 다릅니다.
+:::
+
+
+## ④ 안드로이드 ① — 「검증 안 함」이 사라지기까지 {.fit}
+
+| 시기 | 변화 |
+|---|---|
+| Android 11 초기까지 | CA 인증서에 「Do not validate」가 있어 서버를 확인하지 않고 접속 |
+| Android 11 QPR1 (2020. 12.) | 설정 화면에서 「Do not validate」 삭제 |
+| Android 12 | 엔터프라이즈 네트워크의 서버 인증서 확인 의무화 |
+| Android 13 | 「처음 사용 시 신뢰」(TOFU) 추가, 지원 단말에만 표시 |
+
+- Android 11 QPR1 부터 12 까지는 TOFU 도 없어서, CA 를 지정하거나 「시스템 인증서 사용」과 도메인을 함께 넣어야 저장됩니다
+- 「검증 안 함」을 안내하던 기관은 이 시기에 민원이 몰렸습니다
+
+::: {.callout .notice}
+2020년 말 영국 Jisc, 캐나다 CANARIE 는 「검증 안 함」 안내문을 고치라고 참여기관에 공지했습니다. 국내 사전 설문에서는 8곳 중 6곳이 아직 「인증서 확인 안 함」으로 안내합니다.
+:::
+
+::: ref
+[source.android.com/docs/core/connect/wifi-tofu](https://source.android.com/docs/core/connect/wifi-tofu) · [support.google.com/pixelphone/answer/2844832](https://support.google.com/pixelphone/answer/2844832) · [community.jisc.ac.uk/node/48946](https://community.jisc.ac.uk/node/48946) · [canarie.ca (CAF eduroam Android 공지)](https://www.canarie.ca/document/caf-eduroam-android-users-will-no-longer-connect-requires-a-cat-profile-change/)
+:::
+
+
+## ④ 안드로이드 ② — 지금의 설정 화면과 TOFU {.fit}
+
+- CA 인증서 선택지 (AOSP 기준): 시스템 인증서 사용 · 처음 사용 시 신뢰(지원 단말) · 인증서 설치 · 설치한 CA
+- CA 를 고르지 않거나, 인증서를 골라 놓고 도메인을 비우면 **저장 버튼이 눌리지 않습니다**
+- TOFU 로 「연결」을 누르면 서버가 보낸 체인을 보고 저장할 것을 정합니다
+  - 자기서명 루트까지 보냄: 그 **루트 CA** 를 저장하므로 서버 인증서를 갱신해도 그대로 접속
+  - 중간 CA 까지만, 또는 서버 인증서만 보냄: **서버 인증서 해시**를 저장하므로 갱신하면 끊김
+  - 도메인 칸은 서버 인증서의 SAN(없으면 CN)으로 자동 입력
+
+::: {.callout .tip}
+RADIUS 서버가 체인에 루트 CA 까지 실어 보내면, 안드로이드 TOFU 사용자는 서버 인증서 갱신 때 끊기지 않습니다. 이 동작은 안드로이드에만 해당합니다.
+:::
+
+::: ref
+AOSP packages/modules/Wifi — InsecureEapNetworkHandler.java, WifiConfigManager.java · packages/apps/Settings — WifiConfigController2.java (main 브랜치)
+:::
+
+
+## ④ 안드로이드 ③ — 제조사 단말은 다를 수 있습니다 {.fit}
+
+- AOSP 에는 제조사가 바꿀 수 있는 설정 값이 있습니다\
+  `config_wifiAllowInsecureEnterpriseConfigurationsForSettingsAndSUW` (기본 false, 주석: 「false 를 강력히 권장」)
+- 제조사가 이 값을 켜고 설정 화면을 고치면 「검증 안 함」이 다시 보입니다
+  - Datalogic(산업용 단말): `setprop` 으로 되살리는 방법을 공식 포럼에 안내
+  - 삼성: 해외 메일링 리스트에 「다시 생겼다」는 사용자 보고 1건 (공식 자료 없음)
+- TOFU 는 제조사가 supplicant HAL 을 구현해야 나타납니다. 같은 Android 13 이라도 단말마다 선택지가 다릅니다
+
+::: {.callout .notice}
+안내 페이지에는 선택지 이름을 그대로 적어 줍니다. 「Do not validate」 · 「Don't validate」 · 「지정되지 않음」은 고르지 않고, 「처음 사용 시 신뢰」보다 CA 지정을 먼저 안내합니다.
+:::
+
+::: ref
+AOSP packages/modules/Wifi — ServiceWifiResources/res/values/config.xml · [discussion.datalogic.com](https://discussion.datalogic.com/t/how-to-restore-do-not-validate-option-for-ca-certificate-choice-in-wpa-wpa2-wpa3-enterprise-wi-fi-security-profile-on-android-11/2622) · [lists.geant.org/sympa/arc/cat-users (2021-05)](https://lists.geant.org/sympa/arc/cat-users/2021-05/msg00015.html)
+:::
+
+
+## ④ iOS · macOS — 처음부터 「신뢰」 방식 {.fit}
+
+- 수동 연결에는 「검증 안 함」이 처음부터 없습니다. 첫 접속 때 서버 인증서를 보여 주고 「신뢰」를 묻습니다
+- 「신뢰」를 누르면 **SSID 와 서버 인증서의 SHA-1 해시**를 묶어 저장합니다. 체인을 따라 올라가 CA 를 기억하지는 않습니다
+- 서버 인증서가 바뀌면 해시가 달라져 다시 묻거나 접속에 실패합니다
+- 구성 프로파일에 신뢰할 CA 나 서버 이름(`TLSTrustedServerNames`)이 있으면 「신뢰」 예외 자체를 허용하지 않습니다
+
+::: {.callout .safety}
+Apple 단말은 CA 와 서버 이름을 넣은 구성 프로파일(.mobileconfig)을 배포하면 TOFU 경로가 사라집니다.
+:::
+
+::: ref
+Apple 공개 소스 eap8021x — EAP8021X.fproj/EAPTLSUtil.c, EAPTLSTrustExceptionUtil.c ([github.com/apple-oss-distributions/eap8021x](https://github.com/apple-oss-distributions/eap8021x))
+:::
+
+
+## ④ Windows — 10 과 11 이 다릅니다 {.fit}
+
+### Windows 11
+
+- 다음 중 하나일 때만 서버를 믿습니다
+  - 프로파일에 **서버 인증서 지문**이 있음. 확인 창에서 「연결」을 누르면 자동으로 들어갑니다 (TOFU)
+  - 루트 CA 가 신뢰 저장소에 있고, **그 루트의 지문이 프로파일에 있고**, 서버 이름이 맞음
+- 공인 CA 라도 프로파일에 루트 지문이 없으면 확인 창이 뜹니다
+
+### Windows 10
+
+- EAP 방식마다 동작이 달랐고, 루트 CA 가 신뢰 저장소에 있기만 해도 통과한 경우가 있었습니다
+- Windows 10 에서 되던 프로파일이 11 로 올린 뒤 실패하면 프로파일에 루트 지문을 넣습니다
+
+::: ref
+[learn.microsoft.com — EAP: What's changed in Windows 11](https://learn.microsoft.com/en-us/windows-server/networking/technologies/extensible-authentication-protocol/windows-11-changes)
+:::
+
+
+## ④ 리눅스 — 아직 「CA 인증서 필요 없음」이 있습니다 {.fit}
+
+- NetworkManager(GNOME · KDE 설정 화면)에 「CA 인증서 필요 없음」 체크가 남아 있습니다. 켜면 서버를 **전혀 확인하지 않습니다**
+- TOFU 가 없어 기억하는 것도 없습니다. 끊기지는 않지만 가장 위험한 설정입니다
+- 바른 설정: CA 인증서 파일과 도메인(wpa_supplicant `domain_suffix_match`)
+- wpa_supplicant 를 직접 설정하면 서버 인증서를 고정할 수도 있습니다\
+  `ca_cert="hash://server/sha256/<해시>"` (서버 인증서가 바뀌면 끊깁니다)
+
+::: ref
+wpa_supplicant.conf — ca_cert 설명 (hostap)
+:::
+
+
+## ④ 담당자가 준비할 것 {.fit}
+
+- 안내 페이지를 **운영체제별로** 나눕니다
+  - 안드로이드 (버전과 제조사에 따라 다른 선택지 이름), iOS · macOS, Windows, 리눅스
+- 맨 위에는 공통 값 세 가지: CA 인증서 파일 · SHA-256 지문 · 서버 이름
+- 가능하면 **프로파일**로 배포합니다. Apple 은 .mobileconfig, Windows · 안드로이드는 설정 프로그램
+- 신규 사용자 안내문 · 계정 발급 메일 · 헬프데스크 응대에도 같은 내용을 넣습니다
+- 서버 인증서를 바꾸기 전에 공지합니다. TOFU 로 접속한 단말(iOS · macOS · Windows 11 · 일부 안드로이드)은 끊깁니다
+- 「검증 안 함」을 안내하는 옛 문서와 게시물을 찾아 내립니다
+
+::: {.callout .safety}
+TOFU 는 「검증 안 함」보다 낫지만, 첫 접속이 가짜 AP 이면 가짜를 믿습니다. 안내의 목표는 어느 운영체제든 **CA 지정**입니다.
+:::
+
+
+# 6부 · 안내 페이지 · 고지문 · 기관 정보 {short="6 안내 페이지"}
+
+---
+
+::: {.lead}
+참여기관 의무 확인서 A · C · D
+:::
+
+
+## 의무 확인서 — 무엇을 언제까지 {.fit}
+
+| | 내용 | 근거 |
+|---|---|---|
+| A | 안내 페이지에 「대한민국 eduroam 서비스 및 상표 고지」 게시 (국문 · 영문) | 고지 규정 |
+| B | 인증정보 관리 — 초기 비밀번호, 1인 1계정 | 3.1.8 |
+| C | CA 인증서 · SHA-256 지문 · 서버 이름 게시, 사용자 확인 안내 | 4.5.2 |
+| D | 참여기관 정보(연락처 · 안내 URL) 현행화 | 4.3 |
+
+- 안내 페이지 템플릿: 기관명과 인증서 정보만 바꾸면 **국문 · 영문**이 함께 만들어집니다\
+  github.com/eduroam-kr/onepage-html-site-theme
+
+::: {.callout .warning}
+**점검 결과** — 참여기관 120곳 중 연락처 없음 **76곳** · 안내 URL 없음 **48곳**
+:::
+
+
+## 기관 정보는 어디에 보이나 {.fit}
+
+- eduroam.kreonet.net 참여기관 목록
+- 글로벌 에듀롬 데이터베이스 (GÉANT)
+
+해외에서 접속이 안 되는 우리 구성원, 우리 기관을 찾은 방문자가 **이 연락처로** 연락합니다.
+
+### 등록 · 수정
+
+- **공개 정보 등록 · 동의서** 회신 → NRO 가 등록
+- 또는 eduroam-kr-db 에서 `inst.d/<realm>.yml` 을 고쳐 Pull Request
+- 부서 공용 이메일 · 대표 전화를 권장합니다
+
+
+## 기관 정보 파일 — 예: kisti.re.kr.yml {.fit}
+
+::: {.columns .yml3}
+
+::: .column
+**기관 · realm**
+
+```yaml
+kr:
+  type: 출연
+  parent_ro: nro
+  year_joined: 2012
+
+instid: kisti.re.kr
+type: IdP+SP
+realms:
+  - kisti.re.kr
+name:
+  en: Korea Institute of
+      Science and Technology
+      Information
+  ko: 한국과학기술정보연구원
+inst_type: 연구
+```
+:::
+
+::: .column
+**연락처 · 안내 페이지**
+
+```yaml
+contacts:
+  - name: 한국과학기술정보연구원
+      과학기술연구망센터
+      (KREONET Center, KISTI)
+    email: eduroam-kisti@
+      lists.kreonet.net
+    phone: "+82-42-869-1292"
+
+info_url:
+  ko: "https://eduroam.kisti.re.kr"
+  en: "https://eduroam.kisti.re.kr
+       /en"
+```
+:::
+
+::: .column
+**서비스 위치**
+
+```yaml
+locations:
+  - id: kisti.re.kr.01
+    coordinates:
+      latitude: 36.365786
+      longitude: 127.359266
+    name:
+      ko: 본원
+    address:
+      ko:
+        street: (34141) 대전광역시
+          유성구 대학로 245
+        city: 대전광역시
+    ssid: eduroam
+    enc_level: WPA2/AES
+```
+:::
+
+:::
+
+- 기관 하나에 파일 하나. Pull Request 를 열면 GitHub Actions 가 XML 로 빌드해 **공식 XSD 로 검증**하고, 병합되면 참여기관 목록과 GÉANT 데이터베이스에 반영됩니다
+
+::: ref
+[github.com/eduroam-kr/eduroam-kr-db/blob/main/inst.d/kisti.re.kr.yml](https://github.com/eduroam-kr/eduroam-kr-db/blob/main/inst.d/kisti.re.kr.yml) · 화면용으로 긴 줄을 접고 영문 주소를 줄였습니다 · 전체 항목 설명: [inst.d/\_example.re.kr.yml](https://github.com/eduroam-kr/eduroam-kr-db/blob/main/inst.d/_example.re.kr.yml)
+:::
+
+
+# 7부 · 다중캠퍼스 위치 · 감사 기록 {short="7 위치 · 감사"}
+
+---
+
+::: {.lead}
+「어느 캠퍼스, 어느 건물에서 접속했나」를 표준 속성과 무선 컨트롤러 기본 기능으로 남길 수 있을까요?
+:::
+
+
+## 왜 필요한가 — 통폐합과 다중캠퍼스 {.fit}
+
+- 대학 통폐합으로 **여러 캠퍼스와 이기종 무선 장비**를 함께 운영하는 기관이 크게 늘었습니다
+- 학생과 교수의 「안 된다」를 추적하려면 **어느 캠퍼스, 어느 AP, 어떤 방법**으로 들어왔는지 기록이 있어야 합니다
+- 다수 기관은 무선 컨트롤러 내장 인증이나 어플라이언스를 써서 로그 형식을 바꾸거나 모으기 어렵고, AP 설치로 끝나는 경우가 많습니다
+
+::: {.callout .question}
+제품을 새로 들이지 않고 **적정기술**(가진 장비와 오픈소스를 조합하는 수준)로도 기록과 감사(audit)가 가능할까요?
+:::
+
+
+## 지금 RADIUS 로 알 수 있는 위치 {.fit}
+
+| 속성 | 담는 것 | 위치 구분 |
+|---|---|---|
+| Operator-Name (126) | 방문 기관(서비스 제공 기관) 도메인, 예: `1my.ac.kr` | 기관까지 |
+| Called-Station-Id | AP MAC 주소와 SSID (RFC 3580 권고 형식) | AP 까지. 건물은 따로 만든 대응표로 |
+| NAS-Identifier · NAS-IP-Address | 요청을 보낸 무선 컨트롤러 | 컨트롤러까지 |
+| Calling-Station-Id | 단말 MAC 주소 | 위치 아님. 무작위 MAC 이면 바뀜 |
+
+- Called-Station-Id 에 건물 이름을 끼워 넣는 설정은 제조사마다 다르고 표준이 아닙니다
+
+::: {.callout .notice}
+캠퍼스 · 건물 · 층을 적는 표준 자리는 따로 있습니다. **RFC 5580** (2009) 은 인증 요청과 세션 기록에 접속 지점의 위치를 담는 속성(126 ~ 132)을 정의합니다. 형식은 주소형(Civic, RFC 4776) · 좌표형(위도 · 경도 · 고도) 두 가지입니다.
+:::
+
+::: ref
+[RFC 5580 Carrying Location Objects in RADIUS and Diameter](https://www.rfc-editor.org/rfc/rfc5580) · [RFC 4776 DHCP Option for Civic Addresses](https://www.rfc-editor.org/rfc/rfc4776)
+:::
+
+
+## 캠퍼스 · 건물 · 층을 적는 칸 — 주소형(Civic) {.fit}
+
+| CAtype | 뜻 (RFC 4776) | 대학 예 |
+|---|---|---|
+| (머리) | 국가 코드 | `KR` |
+| 1 · 3 | 시 · 도, 시 · 군 · 구 | 경기도, 용인시 |
+| 23 | 이름 (NAM, 거주자 · 입주 기관) | 국제캠퍼스 |
+| 25 | 건물 | 공학관 |
+| 27 | 층 | 3 |
+| 28 | 호실 | 301 |
+| 22 | 추가 위치 정보 (LOC) | 중앙도서관 열람실 |
+
+- 23 은 원래 입주 기관 이름 칸입니다. 캠퍼스 이름을 여기에 넣을지는 **기관이 규칙으로 정합니다** (Cisco 는 「venue name」으로 부릅니다)
+- 장비마다 채울 수 있는 칸이 다릅니다
+
+
+## 장비가 지원하나요 {.fit}
+
+| 제품 | RFC 5580 | 대신 쓸 수 있는 것 |
+|---|---|---|
+| Cisco Catalyst 9800 (IOS XE) | 17.9.1 부터, 802.1X 사용자만. 국가 · 시도 · 시 · venue name · 우편번호, 좌표. Location-Capable 은 17.11.1 | Called-Station-Id 형식 선택 |
+| HPE Aruba (AOS-10) | Operator-Name · Location-Information 지원 (제조사 문서) | 제조사 속성(VSA) Aruba-Location-Id (AP 이름), Aruba-AP-Group |
+| 그 밖 (국산 무선 컨트롤러, 인증 어플라이언스 등) | 제조사 확인 필요 | 제조사 속성, AP 이름 |
+
+- FreeRADIUS 는 RFC 5580 사전(dictionary)을 기본으로 갖고 있습니다. Location-Data 는 바이트열로 들어오므로 로그를 남긴 뒤 풀어서(decode) 봅니다
+- 국산 인증 서버가 이 속성을 저장하고 조회할 수 있는지는 제조사에 물어야 합니다
+
+::: ref
+Cisco 「Configuring RFC 5580 Location Attributes」(Catalyst 9800 설정 안내서, IOS XE 17.9.1) · [HPE Aruba AOS-10 「Location-Information for Access and Accounting Requests」](https://arubanetworking.hpe.com/techdocs/central/latest/content/aos10x/cfg/aps/gen-rad-lis.htm)
+:::
+
+
+## 실패도 남기려면 — 무엇을 엮나 {.fit}
+
+| 자료 | 언제 생기나 | 알 수 있는 것 |
+|---|---|---|
+| RADIUS 인증 요청 | **성공 · 실패 모두** | 사용자 (우리 기관이면 실제 ID), 단말 MAC, AP, 위치 |
+| RADIUS 세션 기록 (accounting) | 성공한 세션만 | 시작 · 끝 시각, 받은 IP (Framed-IP-Address), 사용량 |
+| CUI | 성공만 | 익명 ID 뒤의 같은 사용자 |
+| 무선 컨트롤러 API · syslog | 연결된 단말 | AP 이름 · 그룹, 단말 IP, 신호 세기, AP 사이 이동 |
+| DHCP 로그 | IP 를 받은 단말 | MAC 과 IP, 시각 |
+
+- 실패는 **인증 서버의 요청 기록**에만 남습니다. 그래서 인증 서버 로그에 AP 와 위치를 함께 남겨야 합니다
+- 자료끼리는 **단말 MAC 과 시각**으로 잇습니다. 무작위 MAC 이라도 한 세션 안에서는 같습니다
+
+
+## 조립 예 — 사는 대신 엮기 {.fit}
+
+```text
+[상용 · 이미 있음]    AP · 무선 컨트롤러 ── API · syslog ─────────────────┐
+                         │ 인증 요청 · 세션 기록                          │
+                         ▼                                                │
+[상용 · 이미 있음]    내장 RADIUS · 인증 어플라이언스                     │
+                         │                                                │
+                         ▼                                                │
+[오픈소스 · 보충]     FreeRADIUS 중계 ──▶ NRO · RO (위치 지움)            │
+                         │ JSON 로그                                      │
+                         ▼                                                │
+[오픈소스]            수집 Vector · promtail ◀────────────────────────────┘
+                         ▼
+[오픈소스]            저장 Loki · ClickHouse ──▶ 조회 Grafana
+```
+
+- 상용 장비와 인증 판정은 **그대로** 두고, 장비가 못 하는 **기록 · 표시**만 오픈소스로 덧붙입니다
+
+::: {.callout .safety}
+표준 속성과 장비 기본 API 로 되는 범위를 먼저 확인하고, 모자란 부분은 오픈소스로 채웁니다. 그래도 안 되는 것만 제품을 검토합니다.
+:::
+
+
+## 조립 예 — 무엇이 무엇을 맡나 {.fit}
+
+| 구성 요소 | 구분 | 맡는 일 |
+|---|---|---|
+| 무선 컨트롤러 · AP | 상용 | 단말 접속, RFC 5580 위치(지원하면), API · syslog 로 단말 · AP 정보 |
+| 내장 RADIUS · 인증 어플라이언스 | 상용 | 계정 확인, 성공 · 실패 판정 |
+| FreeRADIUS 중계 | **오픈소스 (보충)** | 캠퍼스 판별 · Operator-Name 부여, 방문자 CUI 요청, 인증 요청 · 세션 기록 JSON 로그, NRO 로 넘길 때 위치 지움 |
+| Vector · promtail | 오픈소스 | 로그와 컨트롤러 API 자료 수집 |
+| Loki · ClickHouse | 오픈소스 | 원본 로그 보관(Loki), 시간 · 캠퍼스별 집계(ClickHouse) |
+| Grafana | 오픈소스 | 캠퍼스별 성공 · 실패 화면, 사용자 · MAC · CUI 로 찾기 |
+
+- Cisco 9800 은 RESTCONF · NETCONF (YANG 모델), Aruba 는 REST API 로 단말과 AP 정보를 내줍니다
+
+
+## 장비가 못 보내면 — FreeRADIUS 중계를 한 번 더 {.fit}
+
+```text
+뒤에 두기:  AP · 무선 컨트롤러 (내장 RADIUS) ──▶ FreeRADIUS 중계 ──▶ NRO · RO
+앞에 두기:  AP · 무선 컨트롤러 ──▶ FreeRADIUS 중계 ──▶ 어플라이언스 인증 서버 · NRO · RO
+```
+
+- 상용 장비는 그대로 두고 RADIUS 서버 주소만 중계로 돌립니다. 뒤에 두면 로밍 요청만, 앞에 두면 모든 요청이 지납니다
+- 요청을 보낸 장비(NAS-IP-Address · NAS-Identifier)나 AP MAC 으로 **캠퍼스를 판별**해 값을 붙이고 로그에 남깁니다
+- 인증 요청과 세션 기록(accounting)이 모두 지나므로 캠퍼스별 성공 · 실패 · 사용량을 한곳에서 봅니다
+- Operator-Name 도 여기서 넣습니다. NRO 도 대학 RO 를 거쳐 온 요청에 같은 방식(NAS 지문)으로 붙이고 있습니다
+
+::: {.callout .safety}
+장비를 바꾸지 않고 오픈소스 중계 하나로 캠퍼스 단위 기록을 얻습니다.
+:::
+
+
+## 기관에서 할 일 — 위치를 어떻게 정할까 {.fit}
+
+1. **이름 규칙**부터 정합니다. 캠퍼스(23) · 건물(25) · 층(27), 건물 이름은 시설 대장의 건물 코드를 그대로 씁니다
+2. 무선 컨트롤러의 **AP 그룹 · 사이트**를 캠퍼스 · 건물 단위로 맞춥니다. RFC 5580 을 못 보내는 장비도 이것으로 대응표를 만듭니다
+3. RFC 5580 을 지원하면 켜고, 지원하지 않으면 FreeRADIUS 중계에서 캠퍼스 값을 붙여 로그에 남깁니다
+4. 밖으로 보낼 필요가 없는 위치 속성은 FreeRADIUS 중계에서 지웁니다
+
+::: {.callout .question}
+우리 기관 장비가 RFC 5580 · API 를 지원하는지 알려 주시면, 장비별 설정 예를 모아 공유하겠습니다.
+:::
+
+
+# 8부 · 설문 결과와 자유 토론 {short="8 토론"}
+
+---
+
+::: {.lead}
+여러분의 이야기를 듣습니다
+:::
+
+
+## 사전 설문 — 참여기관 운영 현황 {.fit}
+
+| 항목 | 결과 |
+|---|---|
+| 응답 기관 | 8 |
+| 상위 연결 NRO 직접 / KREN | 3 / 4 (모름 1) |
+| RADIUS 제품 국산 / 외산 / 오픈소스 | 7 / 1 / 0 |
+| 「인증서 확인 안 함」으로 안내 | 6 (안내 없음 2, CA · 서버 이름 안내 0) |
+| 안내 페이지 있음 | 5 (만들 계획 2) |
+
+::: ref
+사전 설문 (2026년 11월 발표 기준) · 기관을 알아볼 수 없는 통계로만 공개합니다
+:::
+
+
+## 사전 설문 — 자주 받는 민원 {.fit}
+
+| 자주 받는 민원 | |
+|---|---|
+| 1 | 해외 · 다른 기관 방문 시 접속 불가 (4곳) |
+| 2 | ID · 비밀번호 분실 (3곳) |
+| 3 | 특정 OS · 기기 설정 문의 (2곳) |
+
+월 평균 문의: 1~5건 4곳 · 거의 없음 3곳
+
+::: ref
+사전 설문 (2026년 11월 발표 기준) · 기관을 알아볼 수 없는 통계로만 공개합니다
+:::
+
+
+## 현장 설문
+
+* 사용자 / 운영 담당자 / 도입 검토
+* 접속이 안 된 적 있음
+* 인증서 창을 그냥 넘기는가
+* 운영자 가장 큰 고민
+* KISTI 에 바라는 것
+
+
+## 솔직하게 말씀드립니다 {.center .fit}
+
+::: punch
+대한민국 에듀롬은 **연결**은 했지만,  
+무선 연계와 기관/캠퍼스 내 운영 기술은 **연구하지 않았습니다**
+:::
+
+NRO 도, 참여기관도 마찬가지였습니다
+
+
+## 몰랐던 것 — Operator-Name {.fit}
+
+- RADIUS 에는 요청을 보낸 **방문 기관(서비스 제공 기관)** 을 적는 속성이 있습니다\
+  Operator-Name (RFC 5580, 속성 번호 126)
+- AP 자체는 Called-Station-Id (AP MAC 주소와 SSID), 단말은 Calling-Station-Id 로 옵니다. 둘 다 그 기관 안에서만 의미가 있습니다
+- 값은 이름 공간 번호와 기관 도메인을 붙여 씁니다. 예: `1kisti.re.kr` (1 은 DNS 도메인 이름)
+- FreeRADIUS 에는 이 정책이 들어 있지만 기본 설정에서는 주석 처리돼 있습니다 (`policy.d/operator-name`)
+- 기본 인증 로그에는 남지 않고, 상세 로그를 따로 기록해야 보입니다
+
+::: {.callout .quote}
+발표자도 최근에야 알았습니다. FreeRADIUS 설정에서 처음 보는 항목을 따라가 상세 로그를 따로 찍어 보니, 해외 기관 이름이 `1realm` 형식으로 남아 있었습니다.
+:::
+
+::: ref
+RFC 5580 Carrying Location Objects in RADIUS and Diameter · FreeRADIUS raddb/policy.d/operator-name · [community.jisc.ac.uk/node/297](https://community.jisc.ac.uk/node/297)
+:::
+
+
+## F-Ticks — 유럽은 처음부터 모았습니다 {.fit}
+
+- F-Ticks: 인증 한 건을 **syslog 한 줄**로 남기는 연합 통계 형식
+- 에듀롬 예
+
+```text
+F-TICKS/eduroam/1.0#REALM=my.ac.kr#VISCOUNTRY=KR#VISINST=1visit.ac.kr#CSI=…#RESULT=OK#
+```
+
+- 유럽은 참여기관 RADIUS 서버와 NRO 가 형식을 맞춰 **중앙으로 보냅니다**. 나라를 넘는 로밍을 보려는 것이 큰 목적입니다
+- 웹 ID 연계(SAML)에도 같은 형식이 있습니다. Shibboleth IdP 와 SimpleSAMLphp 가 지원하고, eduGAIN 이 시범 수집을 합니다
+
+::: {.callout .notice}
+GÉANT 에듀롬 운영팀(eduroam OT)에 F-Ticks 연동과 운영팀 참여를 문의했으나, **유럽 회원 전용**이라는 답을 받았습니다.
+:::
+
+::: ref
+[monitor.eduroam.org/f-ticks/howto.php](https://monitor.eduroam.org/f-ticks/howto.php) · [f-ticks.edugain.org](https://f-ticks.edugain.org/about.html) · draft-johansson-fticks (2013, 만료된 인터넷 초안)
+:::
+
+
+## KAFE — 분산 구조라 로그가 더 중요했습니다 {.fit}
+
+- KAFE (Korea Access FEderation): 연구망센터가 운영하는 SAML · OIDC 연계 서비스, eduGAIN 과 REFEDS 프로파일을 따릅니다
+- 에듀롬은 모든 인증이 **NRO 중계 서버를 거쳐** 흐르므로 한곳에서 로그를 잡을 수 있습니다
+- KAFE 는 IdP 와 SP 가 **직접** 주고받는 그물(메시) 구조라 중앙에 남는 기록이 없습니다
+- 처음부터 로깅을 요구하지 않아, 지금은 얼마나 쓰이는지 집계조차 어렵습니다
+
+::: {.callout .warning}
+사전 연구가 있었다면 에듀롬과 KAFE 모두 처음부터 F-Ticks 를 넣었을 것입니다.
+:::
+
+
+## 제안 — 같이 공부할 것 {.fit}
+
+- Operator-Name · CUI 적용 안내서와 설정 예 (FreeRADIUS, 국산 인증 서버)
+- 국내 F-Ticks 형식과 NRO 수집 시험 (에듀롬, KAFE)
+- 다중캠퍼스 기록 · 감사 참조 구성 (가진 장비와 오픈소스 조합)
+- 결과는 이 포럼과 eduroam-kr 저장소로 공유
+
+
+## 함께 이야기할 것 {.fit}
+
+### 운영 지원
+
+- 에듀롬 기술 문의 창구 — **KISTI NOC 에서도 받아야 하지 않나** (사전 설문 건의)
+- 장애 · 인증서버 상태를 기관이 직접 볼 수 있는 화면
+
+<br>
+
+### 무선랜
+
+- 사용자 1인당 속도 제한(QoS), 방문자 정책
+- 밀집 구역 · 개인 공유기 간섭
+- 업체 유지보수 범위 — 인증서 교체, 패치
+- 전담 조직 · 인력 부재 — 무선랜 담당 **8곳 중 7곳 겸임**, 1곳은 업체 위탁 (사전 설문)
+
+
+## 정리 — 다음 단계 {.fit}
+
+### 참여기관
+
+- 확인서 · 동의서 미회신 기관: **오늘 현장** 또는 메일
+- 의무 확인서에 적은 일정대로 이행 — 고지문 · CA 인증서 게시
+- 업체 기본 인증서는 **기관 전용 키로 교체**
+- 사용자에게 **CA · 프로파일 설치** 안내, WIPS 로 가짜 eduroam AP 탐지 · 차단
+
+<br>
+
+### NRO (KISTI)
+
+- 기관별 점검 결과 **개별 통보**
+- 공개 정보 등록 · 동의서 → eduroam-kr-db 반영
+- 오늘 결과 정리해 공유
+
+
+## 감사합니다 {.bare .center .cover .divider}
+
+---
+
+::: {.lead}
+KISTI 과학기술연구망센터  
+대한민국 에듀롬 담당자  
+장민석 ( msjang@kisti.re.kr )
+:::
+
+</textarea>
+
+<div class="reveal"><div class="slides"></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/markdown/markdown.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script src="deck.js"></script>
+</body>
+</html>
